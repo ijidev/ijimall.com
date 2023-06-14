@@ -2,12 +2,24 @@
 @section('content')
 
 <div class="card">
+    <span class="row pl-4">
+        <a href="{{ route('admin.products') }}" class="btn btn-link">All</a>
+        <a href="{{ route('admin.product.pending') }}" class="btn btn-link">Pending</a>
+        <a href="{{ route('admin.trashProduct') }}" class="btn btn-link">Trashed</a>
+        <a href="{{ route('admin.product.draft') }}" class="btn btn-link">Draft</a>
+    </span>
+    
+</div>
+            
+<div class="card">
     <div class="card-header">
         <h4>Product table</h4>
         <div class="card-header-form">
-            <form>
+            
+
+            <form action="{{ route('admin.product.search') }}">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" name="query" class="form-control" placeholder="Search">
                     <div class="input-group-btn">
                         <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
@@ -32,6 +44,7 @@
                         <th>image</th>
                         <th>Product</th>
                         <th>Product description</th>
+                        <th>Status</th>
                         <th class="text-center">Edit</th>
                         {{-- <th>Parent</th> --}}
                         
@@ -65,8 +78,12 @@
                         </td>
 
                         <td>
+                            <span class="badge bg-orange">{{ $product->status }}</span>
+                        </td>
+
+                        <td>
                             <a href="{{ route('admin.editProduct', $product->id) }}" class="btn btn-link"><i class="fas fa-edit "></i>Edit</a>
-                            <a href="{{ route('admin.deleteProduct',  $product->id) }}" class="btn btn-link"> <i class="fas fa-trash "></i> Delete</a>
+                            <a href="{{ route('admin.trash.product',  $product->id) }}" class="btn btn-link"> <i class="fas fa-trash "></i> Trash</a>
                         </td>
 
                     </tr>
@@ -101,12 +118,15 @@
                 <div class="flex-grow-1">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
-                            <div class="form-group">
+                            <div class="form-group row p-2">
                                 {{-- <label for="my-select">Text</label> --}}
-                                <select id="my-select" class="form-control" name="action">
+                                <select id="my-select" class="form-control col-8" name="action">
+                                    <option value="pending">set as Pending</option>
+                                    <option value="draft">set to draft</option>
+                                    <option value="trash">Move to trash</option>
                                     <option value="delete">Delete Selected</option>
                                 </select>
-                                <button type="submit" class="btn btn link-light">Submit</button>
+                                <button type="submit" class="btn btn link-light col-4">Submit</button>
                             </div>
                         </ul>
                     </nav>

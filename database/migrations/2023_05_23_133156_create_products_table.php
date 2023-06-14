@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('description');
+            $table->enum('status', ['pending', 'published', 'draft', 'trash'])->default(['pending']);
             $table->float('price');
             $table->unsignedBigInteger('vendor_id');
             // $table->foreignid('category_id')->constrained()

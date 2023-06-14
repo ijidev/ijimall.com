@@ -76,10 +76,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::controller(ProductController::class)->group(function () {
         Route::get('/admin/add-product', 'addproduct')->name('admin.addproduct');
         Route::get('/admin/all-product', 'allproduct')->name('admin.products');
+        Route::get('/admin/find-product', 'searchproduct')->name('admin.product.search');
         Route::get('/admin/create-product', 'create')->name('admin.createproduct');
         Route::get('/admin/product-action', 'action')->name('product.action');
-        Route::get('/admin/delete-product{productId}', 'delete')->name('admin.deleteProduct');
+        Route::get('/admin/delete-product/{productId}', 'delete')->name('admin.deleteProduct');
+        Route::get('/admin/trash-product/{productId}', 'trash')->name('admin.trash.product');
+        Route::get('/admin/restore-product/{productId}', 'restore')->name('admin.restoreProduct');
         Route::get('/admin/edit-product', 'edit')->name('admin.editProduct');
+        Route::get('/admin/trashed-product', 'trashedProduct')->name('admin.trashProduct');
+        Route::get('/admin/draft-product', 'draftProduct')->name('admin.product.draft');
+        Route::get('/admin/pending-product', 'pendingProduct')->name('admin.product.pending');
         
     });
 
