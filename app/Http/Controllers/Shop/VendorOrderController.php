@@ -36,14 +36,25 @@ class VendorOrderController extends Controller
 
     public function multiupdate(Request $request)
     {
+        
+        
         // dd($request->all());
-        foreach ($request->selected as $orderId) 
-        {
-            $order = SubOrder::find($orderId);
-            $order->status = $request->status;
-            $order->update();
+        $activeId = $request->selected;
+        $orders = SubOrder::find($activeId);
+        if ($orders == null) {
+            # if notting is selected return error massage...
+            return back()->with('error', 'select an item');
+        } else {
+            # code...
+            foreach ($orders as $order) 
+            {
+                $order->status = $request->status;
+                $order->update();
+            }
+            return redirect()->back();
         }
-        return back();
+
+        
     }
 
     public function delete($orderId)

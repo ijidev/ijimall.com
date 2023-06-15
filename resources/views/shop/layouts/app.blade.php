@@ -217,6 +217,16 @@
 
             <!-- Main Content -->
             <div class="main-content">
+                @if (session('success'))
+                <div class="alert alert-success z-index-1000 text-center" role="alert">
+                    {{ session('success') }}
+                </div>
+                @elseif (session('error'))
+                <div class="alert alert-danger z-index-1000 text-center" role="alert">
+                    {{ session('error') }}
+                </div>
+                @endif
+
                 @yield('content')
             </div>
 
