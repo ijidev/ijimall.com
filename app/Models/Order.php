@@ -12,16 +12,18 @@ class Order extends Model
 {
     use HasFactory;
 
-    public function items(){
-        
+    public function items()
+    {   
         return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id',)->withpivot('quantity','price');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function subOrder(){
+    public function subOrder()
+    {
         return $this->hasMany(SubOrder::class);
     }
 
@@ -45,6 +47,9 @@ class Order extends Model
         }
     }
 
-
+    public function trans_log()
+    {
+        $this->hasMany(Transaction::class, 'order_id');
+    }
 
 }

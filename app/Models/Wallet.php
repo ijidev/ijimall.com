@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Wallet extends Model
 {
     use HasFactory;
+
+    public function user()
+    {
+        $this->belongsToMany(User::class);
+    }
+
+    public function shop()
+    {
+        $this->belongsToMany(Shop::class);
+    }
 }

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
-            $table->enum('curency', ['NGN', 'USD'])->default('NGN');
-            $table->float('active_bal');
-            $table->float('hold_bal');
-            $table->foreignid('user_id')->constrained()
+            $table->float('amount');
+            $table->foreignid('shop_id')->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->enum('status', ['pending', 'approved', 'declined'])->default('pending');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wallets');
+        Schema::dropIfExists('withdrawals');
     }
 };

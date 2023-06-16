@@ -50,4 +50,9 @@ class User extends Authenticatable implements LaratrustUser
     public function shop(){
        return $this->hasOne(Shop::class, 'vendor_id');
     }
+
+    public function trans_log()
+    {
+        $this->hasMany(Transaction::class);
+    }
 }
