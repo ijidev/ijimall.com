@@ -13,4 +13,9 @@ class Withdrawal extends Model
     {
         $this->hasMany(Transaction::class);
     }
+
+    public function shop()
+    {
+        $this->belongsTo(Shop::class);
+    }
 }

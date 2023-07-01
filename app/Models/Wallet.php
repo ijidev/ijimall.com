@@ -7,15 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wallet extends Model
 {
+   protected $guarded = [];
     use HasFactory;
 
     public function user()
     {
-        $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function shop()
     {
-        $this->belongsToMany(Shop::class);
+       return $this->belongsTo(Shop::class);
+    }
+
+    public function currency()
+    {
+        return $this->hasOne(Currency::class, 'user_currency', 'user_id', 'currency_id');
     }
 }

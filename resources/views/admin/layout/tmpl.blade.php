@@ -242,18 +242,18 @@
                                     data-feather="shopping-bag"></i><span>Order</span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="{{ route('admin.orders') }}">All Orders</a></li>
-                                <li><a class="nav-link" href="{{ '/admin/orders/pending' }}">Pendding</a></li>
-                                <li><a class="nav-link" href="{{ '/admin/orders/completed' }}">Completed</a></li>
+                                <li><a class="nav-link" href="{{ '' }}">Pendding</a></li>
+                                <li><a class="nav-link" href="{{ '' }}">Completed</a></li>
                                 {{-- <li><a class="nav-link" href="{{ '/admin/tags' }}">Tags</a></li> --}}
                             </ul>
                         </li>
 
                         <li class="dropdown">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                    data-feather="users"></i><span>Customers</span></a>
+                                    data-feather="users"></i><span>Users</span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="{{ '/admin/customers' }}">All Customers</a></li>
-                                <li><a class="nav-link" href="{{ '/admin/add-customer' }}">Add customer</a></li>
+                                <li><a class="nav-link" href="{{ route('admin.users') }}">Users</a></li>
+                                <li><a class="nav-link" href="{{ route('admin.user.add') }}">Add User</a></li>
                                 {{-- <li><a class="nav-link" href="{{ '/admin/orders/completed' }}">Completed</a></li> --}}
                                 {{-- <li><a class="nav-link" href="{{ '/admin/tags' }}">Tags</a></li> --}}
                             </ul>
@@ -319,7 +319,7 @@
                                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                                         data-feather="settings"></i><span>Settings</span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="nav-link" href="{{ '/admin/massage' }}">Genaral</a></li>
+                                    <li><a class="nav-link" href="{{ route('admin.setting') }}">Genaral</a></li>
                                     <li><a class="nav-link" href="{{ 'admin/announcement' }}">Account</a></li>
                                     <li><a class="nav-link" href="{{ 'admin/add-announcement' }}">Security</a></li>
                                 </ul>

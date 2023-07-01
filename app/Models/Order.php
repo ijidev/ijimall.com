@@ -49,7 +49,7 @@ class Order extends Model
 
     public function trans_log()
     {
-        $this->hasMany(Transaction::class, 'order_id');
+        return $this->hasMany(Transaction::class);
     }
 
 }

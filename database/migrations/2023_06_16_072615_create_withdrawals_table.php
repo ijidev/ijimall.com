@@ -20,6 +20,12 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'declined'])->default('pending');
             $table->timestamps();
         });
+
+        // Schema::create('users', function (Blueprint $table) {
+        //     $table->id();
+            
+        //     $table->timestamps();
+        // });
     }
 
     /**

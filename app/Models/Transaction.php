@@ -7,20 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+   protected $guarded = [];
     use HasFactory;
 
     public function order()
     {
-        $this->belongsToMany(Order::class);
+       return $this->belongsTo(Order::class);
     }
 
     public function wallet()
     {
-        $this->belongsToMany(Wallet::class);
+       return $this->belongsTo(Wallet::class);
     }
 
     public function user()
     {
-        $this->belongsToMany(User::class);
+       return $this->belongsTo(User::class);
     }
 }

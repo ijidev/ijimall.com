@@ -13,12 +13,12 @@ class ProductController extends Controller
     public function allproduct(Product $product){
         $products = $product->where('status', '!=' ,'trash')->get();
         // dd($products);
-        return view('admin.pages.products', compact('products'));
+        return view('admin.pages.product.products', compact('products'));
     }
 
     public function addproduct(Category $category){
         $categories = $category->get();
-        return view('admin.pages.add-product', compact('categories'));
+        return view('admin.pages.product.create', compact('categories'));
     }
 
     public function create(Request $request)
@@ -47,7 +47,7 @@ class ProductController extends Controller
             
         }
 
-        return('product created');
+        return view('admin.pages.product.products');
 
     }
 
@@ -126,28 +126,28 @@ class ProductController extends Controller
         $query = $request->input('query');
         $search = Product::where('name', 'LIKE', "%$query%");
         $products = $search->where('status', '!=', 'trash')->get();
-        return view('admin.pages.products', compact('products'));
+        return view('admin.pages.product.products', compact('products'));
     }
 
     public function trashedProduct(Product $product)
     {
        $products = $product->where('status', 'trash')->get();
         // dd($product);
-        return view('admin.pages.trash', compact('products'));
+        return view('admin.pages.product.trash', compact('products'));
     }
 
     public function draftProduct(Product $product)
     {
        $products = $product->where('status', 'draft')->get();
         // dd($product);
-        return view('admin.pages.products', compact('products'));
+        return view('admin.pages.product.products', compact('products'));
     }
 
     public function pendingProduct(Product $product)
     {
        $products = $product->where('status', 'pending')->get();
         // dd($product);
-        return view('admin.pages.products', compact('products'));
+        return view('admin.pages.product.products', compact('products'));
     }
 
     public function trash($productId)

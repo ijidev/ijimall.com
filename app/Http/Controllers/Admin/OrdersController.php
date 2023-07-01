@@ -13,16 +13,20 @@ class OrdersController extends Controller
     //
     public function allorder(Order $order){
         $orders = $order->get();
-        return view('admin.pages.orders', compact('orders'));
+        return view('admin.pages.order.index', compact('orders'));
  
      }
 
      public function details(Order $order, $orderId){
         $order = $order->findOrFail($orderId);
         
-        return view('admin.pages.order-view', compact('order'));
+        return view('admin.pages.order.view', compact('order'));
      }
 
+   public function find($orderId){
+      $orders = Order::where('id', $orderId)->get();
+      return view('admin.pages.order.index', compact('orders'));
+   }
    public function update(Request $request, $orderId){
       $order = Order::findOrFail($orderId);
       $request -> validate([

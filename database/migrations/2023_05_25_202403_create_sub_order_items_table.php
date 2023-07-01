@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('sub_order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignid('sub_order_id')->constrained()
-            ->ondelete('cascade')
-            ->onupdate('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
             $table->foreignid('product_id')->constrained()
-            ->ondelete('cascade')
-            ->onupdate('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
             $table->float('price');
             $table->integer('quantity');
             $table->timestamps();

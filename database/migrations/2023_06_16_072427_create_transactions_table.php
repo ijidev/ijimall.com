@@ -15,19 +15,43 @@ return new class extends Migration
             $table->id();
             $table->string('trans_ref')->unique();
             $table->float('amount');
-            $table->enum('type', ['withdrawal', 'purchase', 'deposit'])->default('purchase');
+            // $table->float('admin_commission');
+            $table->enum('type', ['purchase', 'deposit'])->default('purchase');
             $table->enum('status', ['success', 'failed']);
+
             $table->foreignid('user_id')->constrained()
                 ->ondelete('cascade')
                 ->onUpdate('cascade');
+
             $table->foreignid('order_id')->nullabel()
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreignid('withdrawal_id')->nullable()
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+
+            $table->timestamps();
+        });
+
+        Schema::create('sub_transactions', function (Blueprint $table) {
+            $table->id();
+            $table->string('trans_ref');
+            $table->float('total');
+            $table->float('vendor_commission');
+            $table->string('admin_commission');
+            $table->enum('type', ['purchase', 'deposit'])->default('purchase');
+            $table->enum('status', ['success', 'failed']);
+
+            $table->foreignid('user_id')->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreignid('shop_id')->constrained()
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
+            $table->foreignid('order_id')->nullabel()
+                ->constrained('sub_orders')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -38,5 +62,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('transactions');
+        Schema::dropIfExists('sub_transactions');
     }
 };

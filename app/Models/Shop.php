@@ -17,4 +17,9 @@ class Shop extends Model
     public function products(){
         return $this->hasMany(Product::class, 'vendor_id');
     }
+
+    public function withdrawal()
+    {
+        $this->hasMany(Withdrawal::class);
+    }
 }

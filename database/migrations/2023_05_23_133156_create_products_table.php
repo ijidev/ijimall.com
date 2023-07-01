@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('description');
-            $table->enum('status', ['pending', 'published', 'draft', 'trash'])->default(['pending']);
+            $table->enum('status', ['pending', 'published', 'draft', 'trash'])->default('pending');
             $table->float('price');
             $table->unsignedBigInteger('vendor_id');
             // $table->foreignid('category_id')->constrained()
@@ -23,8 +23,7 @@ return new class extends Migration
             //     ->onupdate('cascade'); 
             
             $table->foreign('vendor_id')->references('id')->on('shops')
-                ->ondelete('cascade')
-                ->onupdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
             $table->string('cover_img')->nullable();
             $table->timestamps();
         });

@@ -23,8 +23,8 @@ return new class extends Migration
 
             $table->foreign('product_id')
             ->references('id')->on('products')
-            ->ondelete('cascade')
-            ->onupdate('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
             $table->float('price');
             $table->integer('quantity');

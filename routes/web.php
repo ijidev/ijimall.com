@@ -7,7 +7,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\ProductController;
@@ -61,6 +64,25 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         
     });
 
+    //Admin user controller
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/admin/users', 'users')->name('admin.users');
+        Route::get('/admin/users/customer', 'customerUser')->name('admin.users.customer');
+        Route::get('/admin/users/vendors', 'vendorUser')->name('admin.users.vendor');
+
+        Route::get('/admin/users/search', 'userSearch')->name('admin.user.search');
+        Route::get('/admin/users/search/email', 'emailSearch')->name('admin.email.search');
+        Route::get('/admin/users/action', 'userAction')->name('admin.user.action');
+
+        Route::get('/admin/user/create', 'addUser')->name('admin.user.add');
+        Route::get('/admin/user/store', 'storeUser')->name('admin.store.user');
+        Route::get('/admin/user/edit/{id}', 'editUser')->name('admin.edit.user');
+        Route::get('/admin/user/manage/{id}', 'manageUser')->name('admin.manage.user');
+        Route::get('/admin/user/fund/{id}', 'fundUser')->name('admin.fund.user');
+        Route::get('/admin/user/delete/{id}', 'deleteUser')->name('admin.trash.user');
+        
+    });
+
     //Admin vendor management Routes
     Route::controller(VendorController::class)->group(function () {
         // Route::get('/dashboard', 'index')->name('admin.dashboard');
@@ -110,7 +132,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('admin/orders/view/{orderId}', 'details')->name('admin.order.view');
         Route::get('admin/orders/update/{orderId}', 'update')->name('admin.order.update');
         Route::get('admin/orders/delete/{orderId}', 'delete')->name('admin.order.delete');
+        Route::get('admin/orders/find/{orderId}', 'find')->name('admin.find.order');
     });  
+
+    //Admin settings route
+    Route::controller(SettingController::class)->group(function () {
+        Route::get('/admin/settings', 'index')->name('admin.setting');
+        Route::get('/admin/settings/save', 'update')->name('admin.setting.update');
+        // Route::post('/orders', 'store');
+    });
+
+    Route::controller(CurrencyController::class)->group(function () {
+        Route::get('/admin/settings/curency', 'store')->name('admin.currency.add');
+        Route::get('/admin/settings/edit-curency/{id}', 'edit')->name('admin.currency.edit');
+        Route::get('/admin/settings/update-curency/{id}', 'update')->name('admin.currency.update');
+        Route::get('/admin/settings/delete-curency/{id}', 'delete')->name('admin.currency.delete');
+        // Route::post('/orders', 'store');
+    });
 });
 
 

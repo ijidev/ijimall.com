@@ -22,10 +22,8 @@ return new class extends Migration
             $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('vendor_id');
             
-            $table->foreign('vendor_id')
-            ->references('id')->on('users')
-            ->ondelete('cascade')
-            ->onupdate('cascade');
+            $table->foreign('vendor_id')->references('id')->on('users')
+            ->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

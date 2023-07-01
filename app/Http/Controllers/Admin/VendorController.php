@@ -13,13 +13,13 @@ class VendorController extends Controller
     public function index(Shop $shop)
     {
         $shops =  $shop->get();
-        return view('admin.pages.shops', compact('shops'));
+        return view('admin.pages.shop.shops', compact('shops'));
     }
 
     public function view($shopId)
     {
         $shop =  Shop::findOrFail($shopId);
-        return view('admin.pages.shop', compact('shop'));
+        return view('admin.pages.shop.shop', compact('shop'));
     }
 
     public function update(Request $request, $shopId)
@@ -51,7 +51,7 @@ class VendorController extends Controller
         {
             $vendors = Shop::get();
             // dd($vendors);
-            return view('admin.pages.__shopdelete', compact('vendors', 'shopId', 'products'));
+            return view('admin.pages.shop.__shopdelete', compact('vendors', 'shopId', 'products'));
         }
 
         dd($product);

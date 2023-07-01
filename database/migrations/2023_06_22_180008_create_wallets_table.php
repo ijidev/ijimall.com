@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->enum('curency', ['NGN', 'USD'])->default('NGN');
-            $table->float('active_bal');
-            $table->float('hold_bal');
+            $table->foreignid('currency_id')->constrained()
+                ->onDelete('cascade')->onUpdate('cascade');
+                $table->float('active_bal')->default(0.00);
+                $table->float('hold_bal')->default(0.00);
             $table->foreignid('user_id')->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
