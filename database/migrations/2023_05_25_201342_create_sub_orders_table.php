@@ -18,8 +18,7 @@ return new class extends Migration
             ->ondelete('cascade')
             ->onupdate('cascade');
             $table->foreignid('vendor_id')->constrained('users')
-            ->ondelete('cascade')
-            ->onupdate('cascade');
+            ->onDelete('cascade')->onUpdate('cascade');
 
             $table->enum('status', ['pending', 'processing', 'completed', 'declined'])->default('pending');
             $table->float('grand_total');

@@ -26,4 +26,9 @@ class SubOrder extends Model
     {
         return $this->belongsTo(Order::class,);
     }
+
+    public function trans_log()
+    {
+       return $this->hasMany(SubTransaction::class, 'suborder_id');
+    }
 }

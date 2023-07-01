@@ -18,8 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             
             $table->foreign('user_id')->references('id')->on('users')
-                ->ondelete('cascade')
-                ->onupdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->enum('status', ['pending', 'processing', 'completed', 'declined'])->default('pending');
             $table->float('grand_total');

@@ -21,7 +21,7 @@ return [
             'users' => 'r,u',
             'profile' => 'r,u',
         ],
-        'user' => [
+        'customer' => [
             'profile' => 'r,u',
         ]
     ],

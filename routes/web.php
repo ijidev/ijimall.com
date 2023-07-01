@@ -7,7 +7,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\ProductController;
@@ -61,6 +64,25 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         
     });
 
+    //Admin user controller
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/admin/users', 'users')->name('admin.users');
+        Route::get('/admin/users/customer', 'customerUser')->name('admin.users.customer');
+        Route::get('/admin/users/vendors', 'vendorUser')->name('admin.users.vendor');
+
+        Route::get('/admin/users/search', 'userSearch')->name('admin.user.search');
+        Route::get('/admin/users/search/email', 'emailSearch')->name('admin.email.search');
+        Route::get('/admin/users/action', 'userAction')->name('admin.user.action');
+
+        Route::get('/admin/user/create', 'addUser')->name('admin.user.add');
+        Route::get('/admin/user/store', 'storeUser')->name('admin.store.user');
+        Route::get('/admin/user/edit/{id}', 'editUser')->name('admin.edit.user');
+        Route::get('/admin/user/manage/{id}', 'manageUser')->name('admin.manage.user');
+        Route::get('/admin/user/fund/{id}', 'fundUser')->name('admin.fund.user');
+        Route::get('/admin/user/delete/{id}', 'deleteUser')->name('admin.trash.user');
+        
+    });
+
     //Admin vendor management Routes
     Route::controller(VendorController::class)->group(function () {
         // Route::get('/dashboard', 'index')->name('admin.dashboard');
@@ -74,12 +96,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     //Admin product management Routes
     Route::controller(ProductController::class)->group(function () {
+        Route::get('/admin/product', 'allproduct')->name('admin.products');
+
+        
         Route::get('/admin/add-product', 'addproduct')->name('admin.addproduct');
-        Route::get('/admin/all-product', 'allproduct')->name('admin.products');
         Route::get('/admin/create-product', 'create')->name('admin.createproduct');
-        Route::get('/admin/product-action', 'action')->name('product.action');
-        Route::get('/admin/delete-product{productId}', 'delete')->name('admin.deleteProduct');
+        
+        Route::get('/admin/delete-product/{productId}', 'delete')->name('admin.deleteProduct');
+        Route::get('/admin/trash-product/{productId}', 'trash')->name('admin.trash.product');
+        Route::get('/admin/restore-product/{productId}', 'restore')->name('admin.restoreProduct');
         Route::get('/admin/edit-product', 'edit')->name('admin.editProduct');
+        
+        Route::get('/admin/find-product', 'searchproduct')->name('admin.product.search');
+        Route::get('/admin/product-action', 'action')->name('product.action');
+        Route::get('/admin/trashed-product', 'trashedProduct')->name('admin.trashProduct');
+        Route::get('/admin/draft-product', 'draftProduct')->name('admin.product.draft');
+        Route::get('/admin/pending-product', 'pendingProduct')->name('admin.product.pending');
         
     });
 
@@ -100,7 +132,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('admin/orders/view/{orderId}', 'details')->name('admin.order.view');
         Route::get('admin/orders/update/{orderId}', 'update')->name('admin.order.update');
         Route::get('admin/orders/delete/{orderId}', 'delete')->name('admin.order.delete');
+        Route::get('admin/orders/find/{orderId}', 'find')->name('admin.find.order');
     });  
+
+    //Admin settings route
+    Route::controller(SettingController::class)->group(function () {
+        Route::get('/admin/settings', 'index')->name('admin.setting');
+        Route::get('/admin/settings/save', 'update')->name('admin.setting.update');
+        // Route::post('/orders', 'store');
+    });
+
+    Route::controller(CurrencyController::class)->group(function () {
+        Route::get('/admin/settings/curency', 'store')->name('admin.currency.add');
+        Route::get('/admin/settings/edit-curency/{id}', 'edit')->name('admin.currency.edit');
+        Route::get('/admin/settings/update-curency/{id}', 'update')->name('admin.currency.update');
+        Route::get('/admin/settings/delete-curency/{id}', 'delete')->name('admin.currency.delete');
+        // Route::post('/orders', 'store');
+    });
 });
 
 
@@ -113,13 +161,24 @@ Route::middleware(['auth', 'role:vendor'])->group(function ()
     Route::get('seller/setup-wizard', [ShopController::class, 'wizard'])->name('vendor.setup');
     // vendor product related routes
     route::controller(VendorProductController::class)->group(function () {
-        Route::get('/Dashbord/product', 'index')->name('vendor.product');
-        Route::get('/Dashbord/product/create', 'create')->name('vendor.createproduct');
-        Route::get('/Dashbord/product/store', 'store')->name('vendor.storeproduct');
-        Route::get('/Dashbord/product/view/{productId}', 'view')->name('vendor.viewproduct');
-        Route::get('/Dashbord/product/edit/{productId}', 'edit')->name('vendor.editproduct');
-        Route::get('/Dashbord/product/update/{productId}', 'update')->name('vendor.updateproduct');
-        Route::get('/Dashbord/product/delete/{productId}', 'delete')->name('vendor.deleteproduct');
+        Route::get('/Dashboard/product', 'index')->name('vendor.product');
+        Route::get('/Dashboard/product/all', 'allP')->name('vendor.all.product');
+        Route::get('/Dashboard/product/pending', 'pending')->name('vendor.pending.product');
+        Route::get('/Dashboard/product/draft', 'draft')->name('vendor.draft.product');
+        Route::get('/Dashboard/product/trashed', 'trashed')->name('vendor.trashed.product');
+        
+        Route::get('/Dashboard/product/create', 'create')->name('vendor.createproduct');
+        Route::get('/Dashboard/product/store', 'store')->name('vendor.storeproduct');
+        Route::get('/Dashboard/product/edit/{productId}', 'edit')->name('vendor.editproduct');
+        Route::get('/Dashboard/product/update/{productId}', 'update')->name('vendor.updateproduct');
+        
+        Route::get('/Dashboard/product/view/{productId}', 'view')->name('vendor.viewproduct');
+        
+        Route::get('/Dashboard/product-action', 'multiaction')->name('vendor.product.action');
+
+        Route::get('/Dashboard/product/trash/{productId}', 'trash')->name('vendor.trash.product');
+        Route::get('/Dashboard/product/restore/{productId}', 'restore')->name('vendor.restore.product');
+        Route::get('/Dashboard/product/delete/{productId}', 'delete')->name('vendor.deleteproduct');
     });
 
     Route::controller(VendorOrderController::class)->group(function () {

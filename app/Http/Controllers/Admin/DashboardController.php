@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -19,9 +20,8 @@ class DashboardController extends Controller
         return view('admin.pages.Categories');
     }
     
-    public function addCategory(){
-        return view('admin.pages.categories');
-    }
+
+
     
     
 }

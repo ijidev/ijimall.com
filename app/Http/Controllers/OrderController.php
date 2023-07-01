@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Mail\OrderPaid;
+use App\Models\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -108,15 +109,53 @@ class OrderController extends Controller
         // dd($order->user->email);
         $order->save();
 
+        //genarate order trans_log
+        $order->trans_log()->create([
+            'trans_ref' => uniqid(),
+            'amount'    => $order->grand_total,
+            'status'    => 'success',
+            'type'      => 'purchase',
+            'user_id'   => Auth::user()->id,
+            'order_id'  => $order->id
+        ]);
+
         //save items to order_items
         $cartItems = \Cart::session(Auth::user())->getContent();
         foreach($cartItems as $item){
-            $order->items()->attach($item->id, ['price' => $item->price, 'quantity' => $item->quantity]);
+            $order->items()->attach($item->id, [
+                'price' => $item->price,
+                'quantity' => $item->quantity
+            ]);
         }  
-
 
         $order->generateSubOrder();
 
+        $suborders = $order->subOrder;
+
+        $commission = Commission::find(1);
+        foreach ($suborders as $order) {
+            if ($commission->type == '%') {
+                //find admin percent
+                $a_c = ($order->grand_total % 100) * $commission->value ;
+                //subtract percent from order amount
+                $amount = $order->grand_total - $a_c;
+            } else {
+                $a_c = $commission->value;
+                $amount = $order->grand_total - $a_c;
+            }
+            // dd($order->id);
+            $order->trans_log()->create([
+            'trans_ref'             => uniqid(),
+            'total'                 => $order->grand_total,
+            'vendor_commission'     => $amount,
+            'admin_commission'      => $a_c,
+            'status'                => 'success',
+            'type'                  => 'purchase',
+            'vendor_id'             => $order->vendor_id,
+            'user_id'               => Auth::user()->id,
+            'suborder_id'              => $order->id
+            ]);
+        }
 
         // return redirect(route('order.payment'));
 

@@ -11,13 +11,14 @@ class ProductController extends Controller
 {
     //
     public function allproduct(Product $product){
-        $products = $product->get()->all();
-        return view('admin.pages.products', compact('products'));
+        $products = $product->where('status', '!=' ,'trash')->get();
+        // dd($products);
+        return view('admin.pages.product.products', compact('products'));
     }
 
     public function addproduct(Category $category){
         $categories = $category->get();
-        return view('admin.pages.add-product', compact('categories'));
+        return view('admin.pages.product.create', compact('categories'));
     }
 
     public function create(Request $request)
@@ -46,26 +47,123 @@ class ProductController extends Controller
             
         }
 
-        return('product created');
+        return view('admin.pages.product.products');
 
     }
 
     public function action(Request $request)
     {
         // dd($request->all());
+        $activeId = $request->selected ;
 
-        foreach ($request->selected as $id) 
-        {
-            if ($request->action == 'delete') {
+        // foreach ($activeId as $productId) {
+            // dd($products);
+            if ($request->action == 'delete') 
+            {
+                $products = Product::find($activeId);
                 # delete all selected...
-                foreach($request->selected as $activeId){
-                   $product = Product::find($activeId);
+                foreach($products as $product)
+                {
                    $product->delete();
-                };
+                }
+                return back(); 
+                
+            }
+            //restore product from trash 
+            elseif ($request->action == 'restore') 
+            {
+                $products = Product::find($activeId);
+                foreach($products as $product)
+                {
+                   $product->status = 'draft';
+                   $product->update();
+                }
+                return back(); 
+                
+            }
+            //move product to trash
+            elseif ($request->action == 'trash') 
+            {
+                $products = Product::find($activeId);
+                foreach ($products as $product) {
+                    # move products to trash...
+                    $product->status = 'trash';
+                    $product->update();
+                }
+                
                 return back();
             }
-        }
+            
+            elseif ($request->action == 'draft') 
+            {
+                $products = Product::find($activeId);
+                foreach ($products as $product) {
+                    # move products to trash...
+                    $product->status = 'draft';
+                    $product->update();
+                }
+                
+                return back();
+            }
+            elseif ($request->action == 'pending') 
+            {
+                $products = Product::find($activeId);
+                foreach ($products as $product) {
+                    # move products to trash...
+                    $product->status = 'pending';
+                    $product->update();
+                }
+                
+                return back();
+            }
+
+        //}
         
+    }
+
+    public function searchProduct(Request $request)
+    {
+        $query = $request->input('query');
+        $search = Product::where('name', 'LIKE', "%$query%");
+        $products = $search->where('status', '!=', 'trash')->get();
+        return view('admin.pages.product.products', compact('products'));
+    }
+
+    public function trashedProduct(Product $product)
+    {
+       $products = $product->where('status', 'trash')->get();
+        // dd($product);
+        return view('admin.pages.product.trash', compact('products'));
+    }
+
+    public function draftProduct(Product $product)
+    {
+       $products = $product->where('status', 'draft')->get();
+        // dd($product);
+        return view('admin.pages.product.products', compact('products'));
+    }
+
+    public function pendingProduct(Product $product)
+    {
+       $products = $product->where('status', 'pending')->get();
+        // dd($product);
+        return view('admin.pages.product.products', compact('products'));
+    }
+
+    public function trash($productId)
+    {
+       $product = Product::find($productId); 
+       $product->status = 'trash';
+       $product->update();
+       return back();
+    }
+
+    public function restore($productId)
+    {
+        $product = Product::find($productId) ;
+        $product->status = 'draft';
+        $product->update();
+        return back();
     }
 
 

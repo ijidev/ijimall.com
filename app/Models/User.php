@@ -50,4 +50,24 @@ class User extends Authenticatable implements LaratrustUser
     public function shop(){
        return $this->hasOne(Shop::class, 'vendor_id');
     }
+
+    public function trans_log()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class,);
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsToMany(Role::class, 'role_user' );
+    }
 }
