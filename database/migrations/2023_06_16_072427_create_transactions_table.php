@@ -44,8 +44,8 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->foreignid('shop_id')->constrained()
-                ->onDelete('set null')
+            $table->foreignid('vendor_id')->constrained('users','id')
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
 
             $table->foreignid('order_id')->nullabel()

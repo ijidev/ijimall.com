@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function users(){
-        $users = User::get();
+        $users = User::get();        
         // dd($users);
         $tableName = 'Users';
         return view('admin.pages.user.users', compact('users','tableName'));

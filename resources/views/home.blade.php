@@ -19,11 +19,13 @@
                         
                     <div class="card-columns">
                         @forelse ($products as $product)
+                        
                         <div class="card">
                             <img class="card-img-top" src="{{ asset('/assets/products/product-1.png') }}" alt="">
                             <div class="card-body">
                                 <h4 class="card-title">{{ $product->name }}</h4>
                                 <p class="card-text">{{ $product->description }}</p>
+                                <span>{{ $currency->symbol. $price = $product->price * $currency->rate }}</span>
                                 <a href="{{ Route('cart.add', $product->id) }}" class="btn btn-light">Add to Cart</a>
                             </div>
 

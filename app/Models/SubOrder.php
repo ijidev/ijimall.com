@@ -12,7 +12,7 @@ class SubOrder extends Model
         'order_id',
         'vendor_id',
         'grand_total',
-         'item_count',
+        'item_count',
         
     ];
     use HasFactory;
@@ -25,6 +25,11 @@ class SubOrder extends Model
     public function order()
     {
         return $this->belongsTo(Order::class,);
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
     }
 
     public function trans_log()

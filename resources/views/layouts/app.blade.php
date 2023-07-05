@@ -58,6 +58,21 @@
     
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ms-auto">
+                            {{-- currency start--}}
+                            @auth
+                                <div class="dropdown open">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    {{ Auth::user()->currency->name }}
+                                    </button>
+                                <div class="dropdown-menu" aria-labelledby="triggerId">
+                                    @foreach ($currencies as $currency)
+                                    <a class="dropdown-item" href="{{ route('user.currency',$currency->name) }}">{{ $currency->name }}</a>
+                                    @endforeach
+                                </div>
+                                </div>
+                            @endauth
+                            {{-- currency end --}}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cart.index') }}">{{ __('Cart') }}
                                 @auth
@@ -119,6 +134,7 @@
 
             @yield('content')
         </main>
+        
     </div>
 </body>
 <footer>

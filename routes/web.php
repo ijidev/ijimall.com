@@ -37,6 +37,7 @@ use App\Http\Controllers\Shop\VendorProductController;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/currency/{name}', [App\Http\Controllers\HomeController::class, 'currency'])->name('user.currency');
 
 Route::middleware(['auth'])->group(function () {
     Route::controller(CartController::class)->group(function(){

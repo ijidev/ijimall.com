@@ -16,7 +16,7 @@
         <tr>
             <td scope="row"><a href="{{ route('cart.delete', $item->id) }}" class="btn btn-banger">X</a></td>
             <td>{{ $item->name }}</td>
-            <td>${{ Cart::get($item->id)->getPriceSum() }}</td>
+            <td>{{$currency->symbol . $price = Cart::get($item->id)->getPriceSum() * $currency->rate }}</td>
             {{-- <form action="{{ route('cart.update' , $item->id) }}"> --}}
                 <td>
                     <div class="col-5">
@@ -47,8 +47,8 @@
         </div><!-- .End .input-group-append -->
     </div><!-- End .input-group -->
 </form>
-<div>Product Total: {{ Cart::session(Auth::user())->getSubTotal(); }}</div>
-<div>Total Payable: {{ Cart::session(Auth::user())->getTotal(); }}</div>
+<div>Product Total: {{$currency->symbol . $subtotal = Cart::session(Auth::user())->getSubTotal() * $currency->rate}}</div>
+<div>Total Payable: {{$currency->symbol . $total = Cart::session(Auth::user())->getTotal() * $currency->rate}}</div>
 <a class="btn btn-primary" href="{{ route('cart.checkout') }}">Proceed to checkout</a>
    
 

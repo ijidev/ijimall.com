@@ -157,6 +157,16 @@ class OrderController extends Controller
             ]);
         }
 
+        //credit vendor
+        $suborders = $order->subOrder;
+        dd($suborders);
+        foreach ($suborders as $order) 
+        {
+            $wallet = $order->vendor->wallet;
+            $wallet->hold_bal = $wallet->hold_bal + $order->trans_log->vendor_commission;
+            $wallet->update();
+        }
+
         // return redirect(route('order.payment'));
 
         //clear cart item

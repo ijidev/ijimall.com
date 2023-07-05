@@ -11,23 +11,27 @@ use App\Http\Controllers\Controller;
 class OrdersController extends Controller
 {
     //
-    public function allorder(Order $order){
-        $orders = $order->get();
-        return view('admin.pages.order.index', compact('orders'));
- 
-     }
+   public function allorder(Order $order)
+   {
+      $orders = $order->get();
+      return view('admin.pages.order.index', compact('orders'));
 
-     public function details(Order $order, $orderId){
-        $order = $order->findOrFail($orderId);
-        
-        return view('admin.pages.order.view', compact('order'));
-     }
+   }
+
+   public function details(Order $order, $orderId)
+   {
+      $order = $order->findOrFail($orderId);
+      
+      return view('admin.pages.order.view', compact('order'));
+   }
 
    public function find($orderId){
       $orders = Order::where('id', $orderId)->get();
       return view('admin.pages.order.index', compact('orders'));
    }
-   public function update(Request $request, $orderId){
+
+   public function update(Request $request, $orderId)
+   {
       $order = Order::findOrFail($orderId);
       $request -> validate([
          'status' => '',
@@ -39,7 +43,8 @@ class OrdersController extends Controller
       return back();
    }
 
-   public function delete(Order $order, $orderId){
+   public function delete(Order $order, $orderId)
+   {
       // $items = DB::select('select * from order_items where order_id =' .$orderId);
       $items= OrderItem::where('order_id', $orderId)->get();
       $order = $order->findOrFail($orderId);

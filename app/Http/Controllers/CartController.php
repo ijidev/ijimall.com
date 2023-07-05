@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Models\Product;
+use App\Models\Currency;
 use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
 use Darryldecode\Cart\CartCondition;
@@ -18,7 +19,9 @@ class CartController extends Controller
     public function index()
     {
         $cart_items = \Cart::session(Auth::user())->getContent() ; 
-        return view('cart.index', compact('cart_items'));
+        $currency = Auth::user()->currency;
+        $currencies = Currency::all();
+        return view('cart.index', compact('cart_items', 'currency', 'currencies'));
     }
 
     /**
@@ -56,17 +59,17 @@ class CartController extends Controller
      */
     public function add(Product $product)
     {
-        \Cart::session(Auth::user())->add(array(
+        \Cart::session(Auth::user())->add([
             'id' => $product->id,
             'name' => $product->name,
             'price' => $product->price,
             'quantity' => 1,
             'attributes' => array(),
             'associatedModel' => $product
-        ));
+        ]);
         // dd($product);
 
-        return redirect (route('cart.index'));
+        return redirect(route('cart.index'));
     }
 
     /**

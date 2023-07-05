@@ -15,6 +15,7 @@
                     <h5 class="card-title">
                         Items Summary
                     </h5>
+
                     <table class="table font-bold">
                         <thead>
                             <tr>
@@ -63,6 +64,7 @@
                             
                         </tbody>
                     </table>
+
                 </div>
             </div>
      
@@ -144,13 +146,32 @@
                         <div class="card-text">
                             <div class="d-flex">
                                 <div class="p flex-grow-1">Order Status:</div>
+                                @if ($order->status == 'pending')
                                 <select class="p btn bg-orange border-0 " name="status">
                                     <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
-                                    <option class="badge badge-green" name="status" value="completed">Delivered</option>
-                                    <option class="badge badge-light" name="status" value="pending">Processing</option>
-                                    <option class="badge badge-primary" name="status" value="processing">shipped Out</option>
-                                    <option class="badge badge-danger text-bg-light" name="status" value="declined">Declined</option>
+                                    <option name="status" value="processing">Processing</option>
+                                    <option name="status" value="shipped">shipped Out</option>
+                                    <option name="status" value="declined">Declined</option>
                                 </select>
+                                @elseif ($order->status == 'processing')
+                                <select class="p btn bg-orange border-0 " name="status">
+                                    <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>                                    <option name="status" value="shipped">shipped</option>
+                                    <option name="status" value="declined">Declined</option>
+                                    <option name="status" value="shipped">Shipped out</option>
+                                </select>
+                                @elseif ($order->status == 'declined')
+                                <select class="p btn bg-orange border-0 " name="status">
+                                    <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
+                                    <option name="status" value="processing">Processing</option>
+                                    <option name="status" value="shipped">shipped Out</option>
+                                </select>
+                                @else
+                                <select disabled class="p btn bg-orange border-0 " name="status">
+                                    <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
+                                    {{-- <option class="badge badge-green" name="status" value="completed">Delivered</option> --}}
+                                    
+                                </select>
+                                @endif
                             </div>
                             <div class="d-flex">
                                 
@@ -179,7 +200,7 @@
                             @if ( $order->order->is_paid == true)
                                 <div class="badge badge-success m-1">Paid</div>
                             @else
-                                <div class="badge bg-danger text-white m-1">Pending</div>
+                                <div class="badge bg-danger text-white m-1">Unpaid</div>
                             @endif
                             
                         </div>
@@ -189,6 +210,12 @@
                                 <div class="badge badge-success m-1">Completed</div>
                             @elseif($order->status == 'processing')
                                 <div class="badge badge-secondry m-1">Processing</div>
+                            @elseif($order->status == 'shipped')
+                                <div class="badge badge-secondry m-1">On Trasit to FC</div>
+                            @elseif($order->status == 'recived')
+                                <div class="badge badge-success text-white m-1">Arived at FC</div>
+                            @elseif($order->status == 'inspection')
+                                <div class="badge bg-yello text-white m-1">Inspecting order</div>
                             @elseif($order->status == 'declined')
                                 <div class="badge badge-danger text-white m-1">Declined</div>
                             @else
