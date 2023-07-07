@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::controller(CartController::class)->group(function(){
         Route::get('/add-to-cart/{product}', 'add')->name('cart.add');
         Route::get('/cart', 'index')->name('cart.index');
-        Route::get('/cart/update_a/{itemtId}', 'update_add')->name('cart.update');
+        Route::get('/cart/update_a/{itemtId}', 'updateCart')->name('cart.update');
         Route::get('/cart/update_r/{itemId}', 'update_remove')->name('cart.update_r');
         Route::get('/cart/delete/{itemId}', 'delete')->name('cart.delete');
         Route::get('/cart/checkout', 'checkout')->name('cart.checkout');

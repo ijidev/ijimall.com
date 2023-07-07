@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Order;
 use App\Mail\OrderPaid;
+use App\Models\SubOrder;
 use App\Models\Commission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +50,7 @@ class OrderController extends Controller
         ]);
 
         $order = new Order();
+        $cart = Cart::where('user_id',Auth::user()->id)->get();
 
         $order->order_number = uniqid('ICO-');
 
@@ -80,8 +83,8 @@ class OrderController extends Controller
             $order->billing_zipcode = $request->billing_zipcode;
         }
         
-        $order->grand_total = \Cart::session(Auth::user())->getTotal();
-        $order->item_count = \Cart::session(Auth::user())->getContent()->count();
+        $order->grand_total = $cart->sum('amount');
+        $order->item_count = $cart->count();
         $order->user_id = Auth::user()->id;
         // $order->timestamps = now();
         // dd($request->payment);
@@ -120,10 +123,11 @@ class OrderController extends Controller
         ]);
 
         //save items to order_items
-        $cartItems = \Cart::session(Auth::user())->getContent();
+        $cartItems = $cart;
         foreach($cartItems as $item){
-            $order->items()->attach($item->id, [
-                'price' => $item->price,
+            // dd($item);
+            $order->items()->attach($item->product_id, [
+                'price' => $item->amount,
                 'quantity' => $item->quantity
             ]);
         }  
@@ -133,50 +137,55 @@ class OrderController extends Controller
         $suborders = $order->subOrder;
 
         $commission = Commission::find(1);
-        foreach ($suborders as $order) {
+        foreach ($suborders as $suborder) 
+        {
             if ($commission->type == '%') {
                 //find admin percent
-                $a_c = ($order->grand_total % 100) * $commission->value ;
+                $a_c = ($suborder->grand_total % 100) * $commission->value ;
                 //subtract percent from order amount
-                $amount = $order->grand_total - $a_c;
+                $amount = $suborder->grand_total - $a_c;
             } else {
                 $a_c = $commission->value;
-                $amount = $order->grand_total - $a_c;
+                $amount = $suborder->grand_total - $a_c;
             }
             // dd($order->id);
-            $order->trans_log()->create([
+            $suborder->trans_log()->create([
             'trans_ref'             => uniqid(),
-            'total'                 => $order->grand_total,
+            'total'                 => $suborder->grand_total,
             'vendor_commission'     => $amount,
             'admin_commission'      => $a_c,
             'status'                => 'success',
             'type'                  => 'purchase',
-            'vendor_id'             => $order->vendor_id,
+            'vendor_id'             => $suborder->vendor_id,
             'user_id'               => Auth::user()->id,
-            'suborder_id'              => $order->id
+            'suborder_id'           => $suborder->id
             ]);
         }
 
         //credit vendor
-        $suborders = $order->subOrder;
-        dd($suborders);
-        foreach ($suborders as $order) 
+        // dd( $order->id);
+        $suborders = SubOrder::where('order_id', $order->id)->get();
+        foreach ($suborders as $suborder) 
         {
-            $wallet = $order->vendor->wallet;
-            $wallet->hold_bal = $wallet->hold_bal + $order->trans_log->vendor_commission;
+            $wallet = $suborder->vendor->wallet;
+            // dd($suborder->trans_log[0]->vendor_commission);
+            $wallet->hold_bal = $wallet->hold_bal + $suborder->trans_log[0]->vendor_commission;
             $wallet->update();
         }
 
         // return redirect(route('order.payment'));
 
         //clear cart item
-        \Cart::session(Auth::user())->clear();
+        foreach ($cart as $cart) {
+            # cleat cart items...
+            $cart->delete();
+        }
         
         //send mail
         // Mail::to($order->user->email)->send(new OrderPaid($order));
         //redirect to thank you page
         $p = $request->payment ;
-        return ('thank you for your order: your order is been processed- payment methold is '.$p );
+        return redirect()->route('home')->with('success' , 'thank you for your order: your order is been processed- payment methold is '.$p );
     }
 
     /**

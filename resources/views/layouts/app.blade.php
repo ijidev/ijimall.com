@@ -77,7 +77,7 @@
                                 <a class="nav-link" href="{{ route('cart.index') }}">{{ __('Cart') }}
                                 @auth
                                     <span class="badge bg-orange text-light">
-                                        {{ Cart::session(Auth::user())->getContent()->count() }}
+                                        {{ $cart->count() }}
                                     </span> 
                                 @endauth
                                     

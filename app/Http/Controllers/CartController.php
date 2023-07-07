@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+// use Cart;
+use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Currency;
-use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
 use Darryldecode\Cart\CartCondition;
 use Illuminate\Support\Facades\Auth;
@@ -18,10 +19,11 @@ class CartController extends Controller
      */
     public function index()
     {
-        $cart_items = \Cart::session(Auth::user())->getContent() ; 
+        $items = Cart::where('user_id' , Auth::user()->id)->get() ; 
         $currency = Auth::user()->currency;
         $currencies = Currency::all();
-        return view('cart.index', compact('cart_items', 'currency', 'currencies'));
+        $cart = Cart::where('user_id', Auth::user()->id)->get();
+        return view('cart.index', compact('items', 'currency', 'currencies','cart'));
     }
 
     /**
@@ -59,26 +61,53 @@ class CartController extends Controller
      */
     public function add(Product $product)
     {
-        \Cart::session(Auth::user())->add([
-            'id' => $product->id,
-            'name' => $product->name,
-            'price' => $product->price,
-            'quantity' => 1,
-            'attributes' => array(),
-            'associatedModel' => $product
-        ]);
+        $useritem = Cart::where('user_id' , Auth::user()->id)->get();
+        $item = $useritem->where('product_id', $product->id);
+        // dd($item);
+        if ($item->count() <= 0) {
+            // dd('product not found');
+            $cart = new Cart();
+            $cart->user_id = Auth::user()->id ;
+            $cart->product_id = $product->id ;
+            $cart->quantity = 1 ;
+            $cart->amount = $product->price ;
+            $cart->save();
+        } else {
+            $item = $item[0];
+            $item->quantity = $item->quantity + 1 ;
+            $item->amount = $item->product->price * $item->quantity;
+            // dd($item);
+            $item->update();
+        }
+        
+
+
+        // dd($cart->item);
+        // \Cart::session(Auth::user())->add([
+        //     'id' => $product->id,
+        //     'name' => $product->name,
+        //     'price' => $product->price,
+        //     'quantity' => 1,
+        //     'attributes' => array(),
+        //     'associatedModel' => $product
+        // ]);
         // dd($product);
 
         return redirect(route('cart.index'));
     }
 
     /**
-     * Display the specified resource.
+     * checkout cart items.
      */
-    public function checkout()
+    public function checkout(Request $request)
     {
-        $total_price = \Cart::session(Auth::user())->getTotal() ;
-        return view('cart.checkout', compact('total_price'));
+        $currency = Auth::user()->currency;
+        $currencies = Currency::all();
+        $cart = Cart::where('user_id', Auth::user()->id)->get();
+        
+        $total_price = $cart->sum('amount');
+        // dd($total_price);
+        return view('cart.checkout', compact('currency','currencies','cart','total_price',));
     }
 
     /**
@@ -90,22 +119,17 @@ class CartController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the resource quantity in storage.
      */
-    public function update_add(Request $request, string $itemId)
+    public function updateCart(Request $request, string $itemId)
     {
-        \Cart::session(Auth::user())->update($itemId, ['quantity' => 1 ]);
-             // so if the current product has a quantity of 4, another 1 will be added so this will result to 5
+        $item = Cart::find($itemId);
+        $item->quantity = $request->quantity;
+        $item->amount = $item->product->price * $request->quantity;
+
+        $item->update();
         
-        
-        // $qty = $request->quantity;
-        // \Cart::session(Auth::user())->update($itemId, [
-        //     'quantity' => [
-        //         'relative' => false,
-        //         'value' => $qty,
-        //     ],
-        //   ]);
-        return back();
+        return back()->with('success', 'cart quantity updated');
     }
 
     public function update_remove(Request $request, string $itemId)
@@ -129,7 +153,7 @@ class CartController extends Controller
      */
     public function delete(string $productId)
     {   
-        \Cart::session(Auth::user())->remove($productId);
-        return back();
+        Cart::find($productId)->delete();
+        return back()->With('success', 'item deleted successfully');
     }
 }

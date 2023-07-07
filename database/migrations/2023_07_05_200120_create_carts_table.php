@@ -16,24 +16,16 @@ return new class extends Migration
 
             $table->foreignid('user_id')->constrained()
                 ->onUpdate('cascade')->onDelete('cascade');
-
-            $table->integer('count');
-            $table->integer('total');
-            $table->integer('subtotal');
-            $table->timestamps();
-        });
-
-        Schema::create('cart_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignid('cart_id')->constrained()
-                ->onDelete('cascade')->onUpdate('cascade');
-
+            
             $table->foreignid('product_id')->constrained()
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->integer('quantity');
+            $table->float('amount');
+
             $table->timestamps();
         });
+
     }
 
     /**
@@ -42,6 +34,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('carts');
-        Schema::dropIfExists('cart_items');
+        // Schema::dropIfExists('cart_items');
     }
 };

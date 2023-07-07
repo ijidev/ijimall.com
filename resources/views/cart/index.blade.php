@@ -12,26 +12,19 @@
         </tr>
     </thead>
     <tbody>
-        @forelse ($cart_items as $item)
+        @forelse ($items as $item)
         <tr>
             <td scope="row"><a href="{{ route('cart.delete', $item->id) }}" class="btn btn-banger">X</a></td>
-            <td>{{ $item->name }}</td>
-            <td>{{$currency->symbol . $price = Cart::get($item->id)->getPriceSum() * $currency->rate }}</td>
-            {{-- <form action="{{ route('cart.update' , $item->id) }}"> --}}
+            <td>{{ $item->product->name }}</td>
+            <td>{{$currency->symbol . $amount = $item->amount * $currency->rate }}</td>
+            <form action="{{ route('cart.update' , $item->id) }}">
                 <td>
                     <div class="col-5">
-                        <input type="number" class="form-control" value="{{ $item->quantity }}" min="1" max="100" step="1" data-decimals="0" required>
-
+                        <input type="number" class="form-control" name="quantity" value="{{ $item->quantity }}" min="1" max="100" step="1" data-decimals="0" required>
                     </div>
-                    
-                    {{-- <a href="{{ route('cart.update_r' , $item->id) }}" class="btn btn-danger">-</a>
-                      
-                    <a href="{{ route('cart.update' , $item->id) }}" class="btn btn-primary">+</a> --}}
-                    
-                    
-                    {{-- <button class="btn-primary" >update</button> --}}
+                    <button class="btn-primary" >update</button>
                 </td> 
-            {{-- </form> --}}
+            </form>
         </tr>
         @empty
         Your cart is empty
@@ -47,10 +40,10 @@
         </div><!-- .End .input-group-append -->
     </div><!-- End .input-group -->
 </form>
-<div>Product Total: {{$currency->symbol . $subtotal = Cart::session(Auth::user())->getSubTotal() * $currency->rate}}</div>
-<div>Total Payable: {{$currency->symbol . $total = Cart::session(Auth::user())->getTotal() * $currency->rate}}</div>
-<a class="btn btn-primary" href="{{ route('cart.checkout') }}">Proceed to checkout</a>
-   
+<div>Cart Total: {{$currency->symbol . $items->sum('amount') * $currency->rate }}</div>
+{{-- <div>Total Payable: {{$currency->symbol . $total = Cart::session(Auth::user())->getTotal() * $currency->rate}}</div> --}}
+
+    <a class="btn btn-link" href="{{ route('cart.checkout') }}">Procced to Checkout</a>
 
 @endsection
 

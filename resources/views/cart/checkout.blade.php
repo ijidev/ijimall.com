@@ -89,7 +89,7 @@
                         <h5 class="card-title">Order Details</h5>
                     </div>
                     <div class="card-body">
-                        <p class="card-text"> <b>Total: </b> {{ $total_price }} </p>
+                        <p class="card-text"> <b>Total: </b> {{ $currency->symbol . $total = $total_price * $currency->rate }} </p>
 
                         <div class="form-group">
                             <div class="control-label">Paymeny Methold</div>
