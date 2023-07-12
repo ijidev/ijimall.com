@@ -11,6 +11,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\Shop\SellerController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\ProductController;
@@ -92,6 +94,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('admin/shop/update/{shopId}', 'update')->name('admin.shop.update');
         Route::get('admin/shop/delete/{shopId}', 'delete')->name('admin.shop.delete');
         Route::get('admin/shop/asign/{shopId}', 'del')->name('vendor.del');
+
+    });
+    
+    //Admin withdrawal management
+    Route::controller(WithdrawalController::class)->group(function () {
+        Route::get('admin/withdrawal/', 'withdrawRequest')->name('withdrawal.request');
+        Route::get('admin/withdrawal/view/{id}', 'view')->name('withdraw.view');
+        Route::get('admin/withdrawal/approve/{id}', 'approve')->name('withdraw.approve');
+        Route::get('admin/withdrawal/decline/{id}', 'decline')->name('withdraw.decline');
+        Route::get('admin/withdrawal/delete/{id}', 'delete')->name('withdraw.delete');
         
     });
 
@@ -130,9 +142,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     //Admin Order management Routes
     Route::controller(OrdersController::class)->group(function () {
         Route::get('admin/orders/', 'allorder')->name('admin.orders');
-        Route::get('admin/orders/view/{orderId}', 'details')->name('admin.order.view');
-        Route::get('admin/orders/update/{orderId}', 'update')->name('admin.order.update');
+        // Route::get('admin/suborders/', 'subOrder')->name('vendor.order');
+
+        Route::get('admin/order/view/{orderId}', 'details')->name('admin.order.view');
+        Route::get('admin/order/manage/{orderId}', 'manageSub')->name('admin.suborder.view'); #manage suborder
+
+        Route::get('admin/order/update/{orderId}', 'update')->name('admin.order.update');
+        Route::get('admin/suborder/update/{orderId}', 'updateSub')->name('admin.suborder.update');
+
         Route::get('admin/orders/delete/{orderId}', 'delete')->name('admin.order.delete');
+        Route::get('admin/suborders/delete/{orderId}', 'delete')->name('admin.suborder.delete');
+
         Route::get('admin/orders/find/{orderId}', 'find')->name('admin.find.order');
     });  
 
@@ -187,6 +207,12 @@ Route::middleware(['auth', 'role:vendor'])->group(function ()
         Route::get('Dashboard/view-order/{orderId}', 'details')->name('vendor.order.view');
         Route::get('Dashboard/update-order/{orderId}', 'update')->name('vendor.order.update');
         Route::get('Dashboard/vendor/update-status', 'multiupdate')->name('vendor.multi-status');
+    });
+
+    Route::controller(WithdrawalController::class)->group(function () {
+        Route::get('/Dashboard/withdrawal', 'withdrawal')->name('vendor.withdrawal');
+        Route::get('/Dashboard/withdrawal/rerquest', 'reqWithdraw')->name('withdraw.request');
+        // Route::post('/orders', 'store');
     });
 });
     

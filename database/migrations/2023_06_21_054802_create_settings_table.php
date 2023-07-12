@@ -20,7 +20,7 @@ return new class extends Migration
 
         Schema::create('commissions', function (Blueprint $table) {
             $table->id();
-            $table->float('value');
+            $table->double('value');
             $table->enum('type', ['%', ''])->nullable()->default('%');
             $table->timestamps();
         });

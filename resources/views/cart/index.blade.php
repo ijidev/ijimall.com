@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('content')
 
-
+@if ($items->count() >= 1)
+    
 <table class="table">
     <thead>
         <tr>
@@ -12,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        @forelse ($items as $item)
+        @foreach ($items as $item)
         <tr>
             <td scope="row"><a href="{{ route('cart.delete', $item->id) }}" class="btn btn-banger">X</a></td>
             <td>{{ $item->product->name }}</td>
@@ -26,9 +27,7 @@
                 </td> 
             </form>
         </tr>
-        @empty
-        Your cart is empty
-        @endforelse
+        @endforeach
     </tbody>
 </table> 
 
@@ -42,8 +41,11 @@
 </form>
 <div>Cart Total: {{$currency->symbol . $items->sum('amount') * $currency->rate }}</div>
 {{-- <div>Total Payable: {{$currency->symbol . $total = Cart::session(Auth::user())->getTotal() * $currency->rate}}</div> --}}
+<a class="btn btn-link" href="{{ route('cart.checkout') }}">Procced to Checkout</a>
 
-    <a class="btn btn-link" href="{{ route('cart.checkout') }}">Procced to Checkout</a>
+@else
+    <h3>cart is empty</h3>
+@endif
 
 @endsection
 

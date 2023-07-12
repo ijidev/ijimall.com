@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignid('vendor_id')->constrained('users')
             ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->enum('status', ['pending', 'processing', 'shipped_out', 'received', 'inspection', 'completed', 'declined'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'shipped','delivered', 'received', 'inspection', 'failed-inspection' ,'completed', 'declined'])->default('pending');
             $table->float('grand_total');
             $table->integer('item_count');
 

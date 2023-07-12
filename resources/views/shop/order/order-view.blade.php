@@ -150,20 +150,26 @@
                                 <select class="p btn bg-orange border-0 " name="status">
                                     <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
                                     <option name="status" value="processing">Processing</option>
-                                    <option name="status" value="shipped">shipped Out</option>
+                                    {{-- <option name="status" value="shipped">shipped Out</option> --}}
                                     <option name="status" value="declined">Declined</option>
                                 </select>
                                 @elseif ($order->status == 'processing')
                                 <select class="p btn bg-orange border-0 " name="status">
-                                    <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>                                    <option name="status" value="shipped">shipped</option>
+                                    <option class="badge badge-primary" name="status" value="processing">Processing</option>                                    <option name="status" value="shipped">shipped</option>
                                     <option name="status" value="declined">Declined</option>
-                                    <option name="status" value="shipped">Shipped out</option>
+                                    {{-- <option name="status" value="shipped">Shipped out</option> --}}
+                                </select>
+                                @elseif ($order->status == 'shipped')
+                                <select class="p btn bg-orange border-0 " name="status">
+                                    <option class="badge badge-primary" name="status" value="shipped">Shipped Out</option>                                    <option name="status" value="shipped">shipped</option>
+                                    <option name="status" value="delivered">Delivered</option>
+                                    {{-- <option name="status" value="shipped">Shipped out</option> --}}
                                 </select>
                                 @elseif ($order->status == 'declined')
                                 <select class="p btn bg-orange border-0 " name="status">
                                     <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
                                     <option name="status" value="processing">Processing</option>
-                                    <option name="status" value="shipped">shipped Out</option>
+                                    {{-- <option name="status" value="shipped">shipped Out</option> --}}
                                 </select>
                                 @else
                                 <select disabled class="p btn bg-orange border-0 " name="status">
@@ -212,8 +218,10 @@
                                 <div class="badge badge-secondry m-1">Processing</div>
                             @elseif($order->status == 'shipped')
                                 <div class="badge badge-secondry m-1">On Trasit to FC</div>
+                            @elseif($order->status == 'delivered')
+                                <div class="badge badge-success text-white m-1">Delivered at FC</div>
                             @elseif($order->status == 'recived')
-                                <div class="badge badge-success text-white m-1">Arived at FC</div>
+                                <div class="badge badge-success text-white m-1">Received at FC</div>
                             @elseif($order->status == 'inspection')
                                 <div class="badge bg-yello text-white m-1">Inspecting order</div>
                             @elseif($order->status == 'declined')

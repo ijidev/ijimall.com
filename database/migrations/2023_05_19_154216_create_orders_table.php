@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->enum('status', ['pending', 'processing', 'completed', 'declined'])->default('pending');
-            $table->float('grand_total');
+            $table->enum('status', ['pending','processing','completed','declined','ready-to-ship','shipped','received','delivered'])->default('pending');
+            $table->double('grand_total');
             $table->integer('item_count');
             $table->boolean('is_paid')->default(false);
             $table->enum('payment_methold',['bank','card',])->default('bank');

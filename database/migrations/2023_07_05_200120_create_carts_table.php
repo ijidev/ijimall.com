@@ -21,7 +21,7 @@ return new class extends Migration
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->integer('quantity');
-            $table->float('amount');
+            $table->double('amount');
 
             $table->timestamps();
         });

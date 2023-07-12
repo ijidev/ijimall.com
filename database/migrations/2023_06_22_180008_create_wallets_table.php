@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignid('currency_id')->constrained()
                 ->onDelete('cascade')->onUpdate('cascade');
-                $table->float('active_bal')->default(0.00);
-                $table->float('hold_bal')->default(0.00);
+                $table->double('active_bal')->default(0.00);
+                $table->double('hold_bal')->default(0.00);
             $table->foreignid('user_id')->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');

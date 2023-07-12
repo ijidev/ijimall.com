@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\SubOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 

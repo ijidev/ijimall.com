@@ -40,8 +40,8 @@
                        <td class="p-0 text-center">
                            <div class="custom-checkbox custom-control">
                                <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input"
-                                   id="checkbox-1">
-                               <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                                   id="checkbox-{{ $order->id }}">
+                               <label for="checkbox-{{ $order->id }}" class="custom-control-label">&nbsp;</label>
                            </div>
                        </td>
 
@@ -73,7 +73,7 @@
                            @endif
                         </td>
 
-                       <td>{{ $order->grand_total }}</td>
+                       <td>{{$currency->symbol. $order->grand_total * $currency->rate}}</td>
                        <td>
                            @if ($order->is_paid == '1')
                               <div class="badge bg-green">Paid</div>
@@ -86,11 +86,11 @@
                         <div class="dropdown d-inline">
                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2"
                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             With Icon
+                             Manage Order
                            </button>
                            <div class="dropdown-menu">
                              <a class="dropdown-item has-icon" href="{{ route('admin.order.view', $order->id) }}"><i class="far fa-eye"></i> View</a>
-                             <a class="dropdown-item has-icon" href="{{ route('admin.order.delete', $order->id) }}"><i class="far fa-trash"></i> Deleet</a>
+                             <a class="dropdown-item has-icon" href="{{ route('admin.order.delete', $order->id) }}"><i class="fas fa-trash    "></i> Deleet</a>
                              {{-- <a class="dropdown-item has-icon" href="#"><i class="far fa-clock"></i> Something else here</a> --}}
                            </div>
                          </div>

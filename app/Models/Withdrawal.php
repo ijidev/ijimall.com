@@ -11,11 +11,11 @@ class Withdrawal extends Model
 
     public function trans_log()
     {
-        $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class);
     }
 
     public function shop()
     {
-        $this->belongsTo(Shop::class);
+        return $this->belongsTo(Shop::class);
     }
 }

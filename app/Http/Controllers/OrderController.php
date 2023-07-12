@@ -62,6 +62,7 @@ class OrderController extends Controller
         $order->shipping_state     = $request->shipping_state;
         $order->shipping_city      = $request->shipping_city;
         $order->shipping_zipcode   = $request->shipping_zipcode;
+        $order->note               = $request->note;
 
         if (!$request->checkbox == 'on') {
             $order->billing_fname   = $request->shipping_fname;
@@ -108,7 +109,7 @@ class OrderController extends Controller
         }
         //set its paid true
         $order->is_paid = true ;
-        $order->status = "processing" ;
+        $order->status = "pending" ;
         // dd($order->user->email);
         $order->save();
 
