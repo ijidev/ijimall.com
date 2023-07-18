@@ -11,6 +11,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\Shop\SellerController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\ProductController;
@@ -37,12 +39,13 @@ use App\Http\Controllers\Shop\VendorProductController;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/currency/{name}', [App\Http\Controllers\HomeController::class, 'currency'])->name('user.currency');
 
 Route::middleware(['auth'])->group(function () {
     Route::controller(CartController::class)->group(function(){
         Route::get('/add-to-cart/{product}', 'add')->name('cart.add');
         Route::get('/cart', 'index')->name('cart.index');
-        Route::get('/cart/update_a/{itemtId}', 'update_add')->name('cart.update');
+        Route::get('/cart/update_a/{itemtId}', 'updateCart')->name('cart.update');
         Route::get('/cart/update_r/{itemId}', 'update_remove')->name('cart.update_r');
         Route::get('/cart/delete/{itemId}', 'delete')->name('cart.delete');
         Route::get('/cart/checkout', 'checkout')->name('cart.checkout');
@@ -91,6 +94,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('admin/shop/update/{shopId}', 'update')->name('admin.shop.update');
         Route::get('admin/shop/delete/{shopId}', 'delete')->name('admin.shop.delete');
         Route::get('admin/shop/asign/{shopId}', 'del')->name('vendor.del');
+
+    });
+    
+    //Admin withdrawal management
+    Route::controller(WithdrawalController::class)->group(function () {
+        Route::get('admin/withdrawal/', 'withdrawRequest')->name('withdrawal.request');
+        Route::get('admin/withdrawal/view/{id}', 'view')->name('withdraw.view');
+        Route::get('admin/withdrawal/approve/{id}', 'approve')->name('withdraw.approve');
+        Route::get('admin/withdrawal/decline/{id}', 'decline')->name('withdraw.decline');
+        Route::get('admin/withdrawal/delete/{id}', 'delete')->name('withdraw.delete');
         
     });
 
@@ -129,9 +142,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     //Admin Order management Routes
     Route::controller(OrdersController::class)->group(function () {
         Route::get('admin/orders/', 'allorder')->name('admin.orders');
-        Route::get('admin/orders/view/{orderId}', 'details')->name('admin.order.view');
-        Route::get('admin/orders/update/{orderId}', 'update')->name('admin.order.update');
+        
+        Route::get('admin/orders/action', 'multiselect')->name('admin.multiaction');
+
+        Route::get('admin/order/view/{orderId}', 'details')->name('admin.order.view');
+        Route::get('admin/order/manage/{orderId}', 'manageSub')->name('admin.suborder.view'); #manage suborder
+
+        Route::get('admin/order/update/{orderId}', 'update')->name('admin.order.update');
+        Route::get('admin/suborder/update/{orderId}', 'updateSub')->name('admin.suborder.update');
+
         Route::get('admin/orders/delete/{orderId}', 'delete')->name('admin.order.delete');
+        Route::get('admin/suborders/delete/{orderId}', 'delete')->name('admin.suborder.delete');
+
         Route::get('admin/orders/find/{orderId}', 'find')->name('admin.find.order');
     });  
 
@@ -158,7 +180,11 @@ Route::resource('vendor', ShopController::class)->middleware(['auth']);
 //Vendor middleware Routes
 Route::middleware(['auth', 'role:vendor'])->group(function () 
 {
-    Route::get('seller/setup-wizard', [ShopController::class, 'wizard'])->name('vendor.setup');
+    Route::get('seller/wizard/welcome', [ShopController::class, 'wizard'])->name('wizard.welcome');
+    Route::get('seller/wizard/accountinfo', [ShopController::class, 'accountInfo'])->name('wizard.accountInfo');
+    Route::get('seller/wizard/skip-info', [ShopController::class, 'skipInfo'])->name('wizard.info.skip');
+    Route::get('seller/wizard/payment', [ShopController::class, 'paymentInfo'])->name('wizard.payment');
+    Route::get('seller/wizard/finish', [ShopController::class, 'finish'])->name('wizard.finish');
     // vendor product related routes
     route::controller(VendorProductController::class)->group(function () {
         Route::get('/Dashboard/product', 'index')->name('vendor.product');
@@ -186,6 +212,12 @@ Route::middleware(['auth', 'role:vendor'])->group(function ()
         Route::get('Dashboard/view-order/{orderId}', 'details')->name('vendor.order.view');
         Route::get('Dashboard/update-order/{orderId}', 'update')->name('vendor.order.update');
         Route::get('Dashboard/vendor/update-status', 'multiupdate')->name('vendor.multi-status');
+    });
+
+    Route::controller(WithdrawalController::class)->group(function () {
+        Route::get('/Dashboard/withdrawal', 'withdrawal')->name('vendor.withdrawal');
+        Route::get('/Dashboard/withdrawal/rerquest', 'reqWithdraw')->name('withdraw.request');
+        // Route::post('/orders', 'store');
     });
 });
     

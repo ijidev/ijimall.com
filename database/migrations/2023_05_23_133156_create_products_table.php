@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->enum('status', ['pending', 'published', 'draft', 'trash'])->default('pending');
-            $table->float('price');
+            $table->double('price');
             $table->unsignedBigInteger('vendor_id');
             // $table->foreignid('category_id')->constrained()
             //     ->ondelete('cascade')

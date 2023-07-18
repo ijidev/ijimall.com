@@ -121,8 +121,9 @@
                             <div class="form-group row p-2">
                                 {{-- <label for="my-select">Text</label> --}}
                                 <select id="my-select" class="form-control col-8" name="action">
-                                    <option value="pending">set as Pending</option>
-                                    <option value="draft">set to draft</option>
+                                    <option value="pending">Set as Pending</option>
+                                    <option value="published">Publish</option>
+                                    <option value="draft">Move to Draft</option>
                                     <option value="trash">Move to trash</option>
                                     <option value="delete">Delete Selected</option>
                                 </select>
@@ -136,18 +137,10 @@
                 <div class="text-right">
                     <nav class="d-inline-block">
                         <ul class="pagination mb-0">
-                            <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1 <span
-                                class="sr-only">(current)</span></a></li>
                             <li class="page-item">
-                            <a class="page-link" href="#">2</a>
+                                {{ $products->appends(['query'=>request('query')])->render() }}
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                            </li>
+                            
                         </ul>
                     </nav>
                 </div> 

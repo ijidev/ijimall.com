@@ -11,7 +11,7 @@ class VendorOrderController extends Controller
 {
     public function index()
     {
-        $orders = SubOrder::where('vendor_id', Auth::user()->id)->get();
+        $orders = SubOrder::where('vendor_id', Auth::user()->id)->orderBy('id','desc')->get();
         // dd($orders);
         return view('shop.order.orders', compact('orders'));
     }
@@ -25,19 +25,20 @@ class VendorOrderController extends Controller
     public function update(Request $request, $orderId)
     {
         $order = SubOrder::findOrFail($orderId);
-      $request -> validate([
-         'status' => '',
-      ]);
-      $order->status = $request->status ;
-      // dd($request->status);
-      $order->update();
+        $request -> validate([
+            'status' => '',
+        ]);
+        $order->status = $request->status ;
+        $order->update();
+
+    //   $subcount = $sub->count(); #get count of total suborders
+      
+    //   dd($parent);
       return back();
     }
 
     public function multiupdate(Request $request)
-    {
-        
-        
+    { 
         // dd($request->all());
         $activeId = $request->selected;
         $orders = SubOrder::find($activeId);

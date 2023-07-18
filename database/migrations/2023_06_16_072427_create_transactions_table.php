@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('trans_ref')->unique();
-            $table->float('amount');
+            $table->double('amount');
             // $table->float('admin_commission');
             $table->enum('type', ['purchase', 'deposit'])->default('purchase');
             $table->enum('status', ['success', 'failed']);
@@ -34,8 +34,8 @@ return new class extends Migration
         Schema::create('sub_transactions', function (Blueprint $table) {
             $table->id();
             $table->string('trans_ref');
-            $table->float('total');
-            $table->float('vendor_commission');
+            $table->double('total');
+            $table->double('vendor_commission');
             $table->string('admin_commission');
             $table->enum('type', ['purchase', 'deposit'])->default('purchase');
             $table->enum('status', ['success', 'failed']);
@@ -44,8 +44,8 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->foreignid('shop_id')->constrained()
-                ->onDelete('set null')
+            $table->foreignid('vendor_id')->constrained('users','id')
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
 
             $table->foreignid('order_id')->nullabel()

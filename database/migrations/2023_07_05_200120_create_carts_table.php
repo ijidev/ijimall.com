@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignid('currency_id')->constrained()
-                ->onDelete('cascade')->onUpdate('cascade');
-                $table->double('active_bal')->default(0.00);
-                $table->double('hold_bal')->default(0.00);
+
             $table->foreignid('user_id')->constrained()
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->foreignid('product_id')->constrained()
+                ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->integer('quantity');
+            $table->double('amount');
+
             $table->timestamps();
         });
+
     }
 
     /**
@@ -29,6 +33,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wallets');
+        Schema::dropIfExists('carts');
+        // Schema::dropIfExists('cart_items');
     }
 };

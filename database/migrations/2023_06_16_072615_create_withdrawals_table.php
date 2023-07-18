@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
-            $table->float('amount');
+            $table->double('amount');
             $table->foreignid('shop_id')->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');

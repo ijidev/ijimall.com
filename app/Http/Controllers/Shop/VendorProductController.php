@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Models\Cart;
 use App\Models\Shop;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -126,7 +127,7 @@ class VendorProductController extends Controller
     public function update(Request $request ,$productId)
     {
         $product = Product::find($productId);
-
+        $cart = Cart::where('product_id', $productId)->get();
         $request -> validate([
             'name' => 'required',
             'price' => ['required', 'integer'],
@@ -141,7 +142,15 @@ class VendorProductController extends Controller
         // $product->name = $request->name;
 
         $product->update();
-        return redirect(route('shop.product'));
+        if ($cart->count() >= 1)
+        {
+            foreach ($cart as $item) {
+                # check if product is in cart and update price...
+                $item->amount = $item->product->price * $item->quantity;
+                $item->update();
+            }
+        }
+        return redirect(route('vendor.product'));
     }
  
     
