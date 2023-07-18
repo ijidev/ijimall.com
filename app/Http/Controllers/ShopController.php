@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Models\User;
 // use App\Http\Requests\StoreShopRequest;
+use App\Models\VendorInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateShopRequest;
@@ -55,15 +56,52 @@ class ShopController extends Controller
     }
 
     public function wizard(Shop $shop)
-    {   $shopId = $shop->where('vendor_id', Auth::user()->id)->get('id');
-        $shops =$shop->findOrFail($shopId);
-        foreach ($shops as $shop) {
-            // dd($shop->id);
-            return view('shop.__setupwizard', compact('shop'));
-        }
+    {   
+        $info = new VendorInfo();
+        $info->shop_id = Auth::user()->shop->id;
+        $info->save();
+        // dd($shop);
+        // $shops =$shop->findOrFail($shop->id);
         
-        
+            return view('shop.wizard.welcome');
+          
     }
+
+    public function accountInfo()
+    {
+        return view('shop.wizard.accountInfo');
+    }
+    
+
+    public function paymentInfo(Request $request)
+    {
+        $info = VendorInfo::where('shop_id', Auth::user()->shop->id)->first();
+        $info->manager_fname = $request->firstName ;
+        $info->manager_lname = $request->lastName;
+        $info->contact_phone = $request->phone;
+        $info->additional_phone = $request->add_phone;
+        $info->email = $request->email;
+        // dd($info);
+        $info->update();
+        return view('shop.wizard.payment');
+    }
+
+    public function skipInfo()
+    {
+        return redirect()->route('wizard.payment');
+    }
+
+    public function finish(Request $request)
+    {
+        $info = VendorInfo::where('shop_id', Auth::user()->shop->id)->first();
+        $info->account_name = $request->Name;
+        $info->bank = $request->bankName;
+        $info->account_number = $request->accountNumber;
+        // dd($info);
+        $info->update();
+        return view('shop.wizard.finish');
+    }
+
 
     /**
      * Store a newly created resource in storage.

@@ -11,9 +11,10 @@ class ProductController extends Controller
 {
     //
     public function allproduct(Product $product){
-        $products = $product->where('status', '!=' ,'trash')->get();
+        $query = [];
+        $products = $product->where('status', '!=' ,'trash')->paginate(20);
         // dd($products);
-        return view('admin.pages.product.products', compact('products'));
+        return view('admin.pages.product.products', compact('products','query'));
     }
 
     public function addproduct(Category $category){
@@ -29,9 +30,9 @@ class ProductController extends Controller
             'category' => ' required ',
             'price' => 'required',
         ]);
-        $product->name    =    $request->name;
-        $product->price    =    $request->price;
-        $product->description    =    $request->description;
+        $product->name          =    $request->name;
+        $product->price         =    $request->price;
+        $product->description   =    $request->description;
         // dd($request->all());
         $product->save();
         // dd($product->id);
@@ -116,6 +117,17 @@ class ProductController extends Controller
                 
                 return back();
             }
+            elseif ($request->action == 'published') 
+            {
+                $products = Product::find($activeId);
+                foreach ($products as $product) {
+                    # move products to trash...
+                    $product->status = 'published';
+                    $product->update();
+                }
+                
+                return back();
+            }
 
         //}
         
@@ -125,27 +137,27 @@ class ProductController extends Controller
     {
         $query = $request->input('query');
         $search = Product::where('name', 'LIKE', "%$query%");
-        $products = $search->where('status', '!=', 'trash')->get();
-        return view('admin.pages.product.products', compact('products'));
+        $products = $search->where('status', '!=', 'trash')->paginate(20);
+        return view('admin.pages.product.products', compact('products', 'query'));
     }
 
     public function trashedProduct(Product $product)
     {
-       $products = $product->where('status', 'trash')->get();
+       $products = $product->where('status', 'trash')->paginate(20);
         // dd($product);
         return view('admin.pages.product.trash', compact('products'));
     }
 
     public function draftProduct(Product $product)
     {
-       $products = $product->where('status', 'draft')->get();
+       $products = $product->where('status', 'draft')->paginate(20);
         // dd($product);
         return view('admin.pages.product.products', compact('products'));
     }
 
     public function pendingProduct(Product $product)
     {
-       $products = $product->where('status', 'pending')->get();
+       $products = $product->where('status', 'pending')->paginate(20);
         // dd($product);
         return view('admin.pages.product.products', compact('products'));
     }

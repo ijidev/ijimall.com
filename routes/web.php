@@ -142,7 +142,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     //Admin Order management Routes
     Route::controller(OrdersController::class)->group(function () {
         Route::get('admin/orders/', 'allorder')->name('admin.orders');
-        // Route::get('admin/suborders/', 'subOrder')->name('vendor.order');
+        
+        Route::get('admin/orders/action', 'multiselect')->name('admin.multiaction');
 
         Route::get('admin/order/view/{orderId}', 'details')->name('admin.order.view');
         Route::get('admin/order/manage/{orderId}', 'manageSub')->name('admin.suborder.view'); #manage suborder
@@ -179,7 +180,11 @@ Route::resource('vendor', ShopController::class)->middleware(['auth']);
 //Vendor middleware Routes
 Route::middleware(['auth', 'role:vendor'])->group(function () 
 {
-    Route::get('seller/setup-wizard', [ShopController::class, 'wizard'])->name('vendor.setup');
+    Route::get('seller/wizard/welcome', [ShopController::class, 'wizard'])->name('wizard.welcome');
+    Route::get('seller/wizard/accountinfo', [ShopController::class, 'accountInfo'])->name('wizard.accountInfo');
+    Route::get('seller/wizard/skip-info', [ShopController::class, 'skipInfo'])->name('wizard.info.skip');
+    Route::get('seller/wizard/payment', [ShopController::class, 'paymentInfo'])->name('wizard.payment');
+    Route::get('seller/wizard/finish', [ShopController::class, 'finish'])->name('wizard.finish');
     // vendor product related routes
     route::controller(VendorProductController::class)->group(function () {
         Route::get('/Dashboard/product', 'index')->name('vendor.product');

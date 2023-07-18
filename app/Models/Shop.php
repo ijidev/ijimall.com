@@ -20,6 +20,11 @@ class Shop extends Model
 
     public function withdrawal()
     {
-        $this->hasMany(Withdrawal::class);
+       return $this->hasMany(Withdrawal::class);
+    }
+
+    public function vendorInfo()
+    {
+       return $this->hasOne(VendorInfo::class);
     }
 }

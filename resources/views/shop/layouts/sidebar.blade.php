@@ -50,7 +50,7 @@
                   {{-- <li><a class="nav-link" href="{{ '/admin/Vendors' }}">All Vendors</a></li> --}}
                   {{-- <li><a class="nav-link" href="{{ '/admin/add-vendor' }}">Add Vendor</a></li> --}}
                   <li><a class="nav-link" href="{{ '/admin/vendor-shipping' }}">Shipping</a></li>
-                  <li><a class="nav-link" href="{{ '/admin/inspection' }}">Inspection</a></li>
+                  {{-- <li><a class="nav-link" href="{{ '/admin/inspection' }}">Inspection</a></li> --}}
                   <li><a class="nav-link" href="{{ route('vendor.withdrawal') }}">Withdrawal</a></li>
                   <li><a class="nav-link" href="{{ '/admin/vendor-setting' }}">Settings</a></li>
               </ul>

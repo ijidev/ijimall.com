@@ -12,8 +12,10 @@ class WithdrawalController extends Controller
     public function withdrawRequest()
     {
         $currency = Auth::user()->currency;
-        $withdraws = withdrawal::orderBy('id', 'desc')->get();
-        return view('admin.pages.shop.withdrawal', compact('withdraws', 'currency'));
+        $withdraws = withdrawal::where('status','pending')->orderBy('id', 'desc')->get();
+        $withdrawals = withdrawal::where('status','!=','pending')->orderBy('id', 'desc')->get();
+        // dd($withdrawals);
+        return view('admin.pages.shop.withdrawal', compact('withdraws','withdrawals','currency'));
     }
 
     public function view($id)
@@ -35,9 +37,13 @@ class WithdrawalController extends Controller
     public function decline($id)
     {
         $withdraw = withdrawal::findOrFail($id);
+        $wallet = $withdraw->shop->vendor->wallet;
         $withdraw->status = 'declined';
+        // dd($wallet);
         $withdraw->update();
-        return back()->with('error','Pay Out sucessfully Declined');
+        $wallet->active_bal += $withdraw->amount;
+        $wallet->update();
+        return back()->with('error','Pay Out Declined and successfully refunded to vendor wallet');
     }
 
     public function delete($id)

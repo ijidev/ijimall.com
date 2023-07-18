@@ -5,7 +5,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Withdrawal Request</h5>
+        <h5 class="card-title">Pending Withdrawal Request</h5>
         <div class="table-responsive">
             <table class="table table-striped">
 
@@ -62,6 +62,60 @@
                     <th>Amount</th>
                     <th>Status</th>
                     <th>Action</th>
+                </tr>
+                    
+
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Withdrawal History</h5>
+        <div class="table-responsive">
+            <table class="table table-striped">
+
+                <tr class="bg-light">
+                    <th>ID</th>
+                    <th>Time</th>
+                    <th>Shop</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+
+                @foreach ($withdrawals as $request)
+                    <tr>
+                        <td>{{ $request->id }}</td>
+                        <td>{{ $request->created_at }}</td>
+                        <td>{{ $request->shop->name }}</td>
+                        <td>{{ $currency->symbol . $request->amount * $currency->rate  }}</td>
+                        <td>
+                            @if ($request->status == 'pending')
+                                <span class="badge bg-orange">
+                                    {{ $request->status }}
+                                </span>
+                            @elseif($request->status == 'declined')
+                                <span class="badge bg-danger text-white">
+                                    {{ $request->status }}
+                                </span>
+                            @else
+                                <span class="badge bg-success text-white">
+                                    {{ $request->status }}
+                                </span>
+                            @endif
+                        </td>
+                    
+                    </tr>
+                @endforeach
+                
+                <tr class="bg-light">
+                    <th>ID</th>
+                    <th>Time</th>
+                    <th>Shop</th>
+                    <th>Amount</th>
+                    <th>Status</th>
                 </tr>
                     
 

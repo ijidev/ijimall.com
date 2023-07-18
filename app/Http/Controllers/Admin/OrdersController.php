@@ -16,9 +16,48 @@ class OrdersController extends Controller
    public function allorder(Order $order)
    {
       $currency = Auth::user()->currency;
-      $orders = $order->orderBy('id','desc')->get();
+      $orders = $order->latest()->paginate(20);
       return view('admin.pages.order.index', compact('orders', 'currency'));
 
+   }
+
+   public function multiselect(Request $request)
+   {
+      $id = $request->selected ;
+      $orders = Order::findOrFail($id);
+      if ($request->action == 'delete') {
+         // dd($order);
+         foreach ($orders as $order) {
+
+            #delete suborder
+            $subs = $order->subOrder;
+            foreach ($subs as $sub) {
+              
+               #delete suborder items
+               $items = $sub->orderItems;
+               foreach ($items as $item) {
+                  $item->delete();
+               }
+
+               $sub->delete();
+            }
+
+            # delete order items...
+            $items = $order->orderItems;
+            foreach ($items as $item) {
+               $item->delete();
+            }
+            $order->delete();
+         }
+         return back();
+      }else{
+         // dd($orders);
+         foreach ($orders as $order) {
+            $order->status = $request->action;
+            $order->update();
+         }
+         return redirect()->route('admin.orders');
+      }
    }
 
    public function details(Order $order, $orderId)
@@ -43,12 +82,16 @@ class OrdersController extends Controller
       // dd($request->status);
       $order->status = $request->status;
       $order->update();
+      
       return back();
    }
 
    public function updateSub(Request $request, $orderId)
    {
       $order = SubOrder::findOrFail($orderId);
+      $parent = $order->order;
+      $sub = SubOrder::where('order_id', $parent->id)->get();
+
       $request -> validate([
          'status' => '',
       ]);
@@ -56,30 +99,67 @@ class OrdersController extends Controller
       $order->status = $request->status;
       $order->update();
 
-      
-
-      if ($order->status == 'completed') {
-         $commission = $order->trans_log[0]->vendor_commission;
+      if ($order->status == 'completed') 
+      {
+         $commission = $order->trans_log->first()->vendor_commission;
          $wallet = $order->vendor->wallet; #find vendor wallet
          $wallet->hold_bal -= $commission ; #deduct order amount from hold balance
          $wallet->active_bal += $commission ; #credit order amount to vendor active bal
          // dd($wallet);
          $wallet->update();
       }
+      elseif ($order->status == 'refunded')
+      {
+         $wallet = $order->user->wallet;
+         $wallet->active_bal += $order->grand_total;
+         $wallet->update();
+         // return back()->with('success','order ');
+      }
+
+      if ($sub->where('status','completed')->count() == $sub->count()) 
+      {
+         //   dd('true');
+         $parent->status = 'ready-to-ship' ;
+         $parent->update();
+
+      } 
+      elseif($sub->where('status','refunded')->count() == $sub->count())
+      {
+         $parent->status = 'refunded';
+         $parent->update();
+      }
+      elseif($sub->where('status','failed-inspection')->count() == $sub->count())
+      {
+         $parent->status = 'declined';
+         $parent->update();
+      }
+
       return back();
    }
 
-   public function delete(Order $order, $orderId)
+   public function delete($orderId)
    {
       // $items = DB::select('select * from order_items where order_id =' .$orderId);
-      $items= OrderItem::where('order_id', $orderId)->get();
-      $order = $order->findOrFail($orderId);
-      // dd($item);
+      $order = Order::findOrFail($orderId);
+      $items= $order->orderItems;
+      $subs= $order->subOrder;
+      // $subitems= $subs->items;
+      // dd($items);
+
+      # delete subOrder...
+      foreach ($subs as $sub) {
+         # delete subOrderItems...
+         foreach ($sub->orderItems as $item) 
+         {
+            $item->delete();
+         }
+         $sub->delete();
+      }
 
       foreach ($items as $item){
          $item->delete();
-         // DB::delete('delete order_items where id ='.$item->id);
       }
+      // DB::delete('delete order_items where id ='.$item->id);
       
       $order->delete();
       return back();

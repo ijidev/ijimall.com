@@ -25,20 +25,14 @@ class VendorOrderController extends Controller
     public function update(Request $request, $orderId)
     {
         $order = SubOrder::findOrFail($orderId);
-        $parent = $order->order;
-        $sub = SubOrder::where('order_id', $parent->id)->get();
-      $request -> validate([
-         'status' => '',
-      ]);
-      $order->status = $request->status ;
-      $order->update();
+        $request -> validate([
+            'status' => '',
+        ]);
+        $order->status = $request->status ;
+        $order->update();
 
     //   $subcount = $sub->count(); #get count of total suborders
-      if ($sub->where('status','completed')->count() == $sub->count()) {
-        //   dd('true');
-        $parent->status = 'ready-to-ship' ;
-        $parent->update();
-      }
+      
     //   dd($parent);
       return back();
     }

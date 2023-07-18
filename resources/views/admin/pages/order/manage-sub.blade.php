@@ -110,7 +110,18 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Vendor Details</h5>
+
+                    <div class="d-flex">
+                        <div class="flex-grow-1">
+                            <h6 class="card-title bold">Vendor Details</h6>
+                        </div>
+                        <div class="badge badge-dark has-icon m-0">
+                            <i class="far fa-comments"></i> Massage Vendor
+                        </div>
+                    </div>
+
+                    <hr>
+
                     <div class="card-text font-bold">
                         <div class="d-flex">
                             <div class="p-2 flex-grow-1">Shop:</div>
@@ -156,16 +167,16 @@
                                         <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
                                     </select>
                                 @else
-                                <select class="p-2 btn bg-orange border-0 " name="status">
-                                    <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
-                                    <option  name="status" value="completed">Completed</option>
-                                    <option  name="status" value="shipped">Shipped</option>
-                                    <option  name="status" value="delivered">Delivered</option>
-                                    <option  name="status" value="inspection">Inspection</option>
-                                    <option  name="status" value="failed-inspection">Failed Inspection</option>
-                                    <option name="status" value="pending">Pending</option>
-                                    <option name="status" value="processing">Processing</option>
-                                    <option name="status" value="declined">Declined</option>
+                                <select class="p-2 btn bg-orange border-0 text-white" name="status">
+                                    <option class="text-white badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
+                                    <option class="text-white" name="status" value="pending">Pending</option>
+                                    <option class="text-white" name="status" value="processing">Processing</option>
+                                    <option class="text-white" name="status" value="shipped">Shipped</option>
+                                    <option class="text-white" name="status" value="delivered">Delivered</option>
+                                    <option class="text-white" name="status" value="inspection">Inspection</option>
+                                    <option class="text-white" name="status" value="failed-inspection">Failed Inspection</option>
+                                    <option class="text-white" name="status" value="completed">Completed</option>
+                                    <option class="text-white" name="status" value="declined">Declined</option>
                                 </select>
                                 @endif
                                 
@@ -173,14 +184,29 @@
                             <div class="d-flex ">
                                 <div class="p-2 flex-grow-1">Item Received:</div>
                                 <div class="custom-checkbox custom-control m-2 ">
-                                    @if ($order->status == 'received'||'inspection'||'failed-inspection'||'declined')
+                                    @if ($order->status == 'received')
                                         <input type="checkbox" checked disabled data-checkboxes="mygroup" name="received" value="received" class="custom-control-input"
+                                        id="checkbox-{{ $order->id }}">
+                                        <label for="checkbox-{{ $order->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                    @elseif ($order->status == 'inspection')
+                                            <input type="checkbox" checked disabled data-checkboxes="mygroup" name="received" value="received" class="custom-control-input"
                                             id="checkbox-{{ $order->id }}">
-                                        <label for="checkbox-{{ $order->id }}"  class="custom-control-label">&nbsp;</label>
+                                            <label for="checkbox-{{ $order->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                    @elseif ($order->status == 'failed-inspection')
+                                        <input type="checkbox" checked disabled data-checkboxes="mygroup" name="received" value="received" class="custom-control-input"
+                                        id="checkbox-{{ $order->id }}">
+                                        <label for="checkbox-{{ $order->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                    @elseif ($order->status == 'declined')
+                                        <input type="checkbox" disabled data-checkboxes="mygroup" name="received" value="received" class="custom-control-input"
+                                        id="checkbox-{{ $order->id }}">
+                                        <label for="checkbox-{{ $order->id }}" class="custom-control-label">&nbsp;</label>
                                     </div>
                                     @else
                                         <input type="checkbox" data-checkboxes="mygroup" name="received" value="received" class="custom-control-input"
-                                            id="checkbox-{{ $order->id }}">
+                                        id="checkbox-{{ $order->id }}">
                                         <label for="checkbox-{{ $order->id }}" class="custom-control-label">&nbsp;</label>
                                     </div>
                                     @endif
@@ -222,8 +248,12 @@
                                 <div class="badge badge-secondry m-1">Processing</div>
                             @elseif($order->status == 'declined')
                                 <div class="badge badge-danger text-white m-1">Declined</div>
+                            @elseif($order->status == 'declined')
+                                <div class="badge badge-danger text-white m-1">Declined</div>
+                            @elseif($order->status == 'failed-inspection')
+                                <div class="badge badge-danger text-white m-1">Failed Inspection</div>
                             @else
-                                <div class="badge bg-light m-1">Pending</div>
+                                <div class="badge bg-orange m-1">{{ $order->status }}</div>
                             @endif
                         </div>
                         {{-- <div class="d-flex">

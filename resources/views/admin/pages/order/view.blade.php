@@ -46,8 +46,8 @@
                                 </td>
 
                                 <td>
-                                    <a class="dropdown-item has-icon" href="{{ route('admin.suborder.view', $order->id) }}"><i class="fas fa-edit    "></i> manage</a>
-
+                                    <a class="dropdown-item has-icon" href="{{ route('admin.suborder.view', $suborder->id) }}">
+                                    <i class="fas fa-edit"></i> manage</a>
                                 </td>
 
                                 
@@ -197,12 +197,15 @@
                         <div class="card-text">
                             <div class="d-flex">
                                 <div class="p-2 flex-grow-1">Status:</div>
-                                <select class="p-2 btn bg-orange border-0 " name="status">
-                                    <option class="badge badge-primary" name="status" value="{{ $order->status }}">{{ $order->status }}</option>
-                                    <option class="badge badge-green" name="status" value="completed">Shipped</option>
-                                    <option class="badge badge-light" name="status" value="pending">Pending</option>
-                                    <option class="badge badge-primary" name="status" value="processing">Processing</option>
-                                    <option class="badge badge-danger text-bg-light" name="status" value="declined">Declined</option>
+                                <select class="p-2 btn bg-orange text-white border-0 " name="status">
+                                    <option class="text-white" name="status" value="{{ $order->status }}">{{'('. $order->status .')'}}</option>
+                                    <option class="text-white" name="status" value="pending">Pending</option>
+                                    <option class="text-white" name="status" value="processing">Processing</option>
+                                    <option class="text-white" name="status" value="ready-to-ship">Ready To Ship</option>
+                                    <option class="text-white" name="status" value="shipped">Shipped</option>
+                                    <option class="text-white" name="status" value="delivered">Delivered</option>
+                                    <option class="text-white" name="status" value="completed">Completed</option>
+                                    <option class="text-white" name="status" value="declined">Declined</option>
                                 </select>
                             </div>
                                 <div>
@@ -238,14 +241,18 @@
                         </div>
                         <div class="d-flex">
                             <div class="p-2 flex-grow-1">Status:</div>
-                            @if ( $order->status == 'completed')
-                                <div class="badge badge-success m-1">Completed</div>
-                            @elseif($order->status == 'processing')
-                                <div class="badge badge-secondry m-1">Processing</div>
+                            @if ($order->status == 'pending')
+                                <div class="badge bg-light">Pending</div>                            
+                            @elseif ($order->status == 'processing')
+                                <div class="badge bg-orange">Processing</div>
+                            @elseif ($order->status == 'completed')
+                                <div class="badge bg-green">completed</div>
+                            @elseif ($order->status == 'delivered')
+                                <div class="badge bg-green">Delivered</div>
                             @elseif($order->status == 'declined')
-                                <div class="badge badge-danger text-white m-1">Declined</div>
+                                <div class="badge bg-danger">Declined</div>
                             @else
-                                <div class="badge bg-light m-1">Pending</div>
+                                <div class="badge bg-orange">{{ $order->status }}</div>
                             @endif
                             
                         </div>
