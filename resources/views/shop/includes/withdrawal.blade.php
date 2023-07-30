@@ -1,4 +1,7 @@
 @extends('shop.layouts.app')
+@section('title')
+    Withdrawal
+@endsection
 @section('content')
 <div class="card">
     <div class="card-body">

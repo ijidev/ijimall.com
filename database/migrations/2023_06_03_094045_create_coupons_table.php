@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('discountType', ['percent', 'fixed'])->default('percent');;
+            $table->foreignid('shop')->constrained()
+                ->onDelete('cascade')->onUpdate('cascade');
+            $table->enum('discountType', ['percent', 'fixed'])
+                ->default('percent');
             $table->string('code');
             $table->integer('value');
+            $table->integer('usable');
+            $table->integer('used');
+            $table->boolean('expired')->default(false);
             $table->string('description')->nullable();
             $table->timestamps();
         });

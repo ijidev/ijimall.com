@@ -12,9 +12,7 @@ use App\Http\Requests\UpdateShopRequest;
 
 class ShopController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         if(Auth::user()->hasRole('vendor'))
@@ -28,11 +26,6 @@ class ShopController extends Controller
         }
     }
 
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         $request -> validate([
@@ -72,7 +65,6 @@ class ShopController extends Controller
         return view('shop.wizard.accountInfo');
     }
     
-
     public function paymentInfo(Request $request)
     {
         $info = VendorInfo::where('shop_id', Auth::user()->shop->id)->first();
@@ -100,6 +92,14 @@ class ShopController extends Controller
         // dd($info);
         $info->update();
         return view('shop.wizard.finish');
+    }
+
+    public function storeInfo()
+    {
+        $store = Shop::where('vendor_id', Auth::user()->id)->first();
+        // dd($store);
+        $info = VendorInfo::where('shop_id', $store->id)->get();
+        return view('shop.includes.storeinfo', compact('store','info'));
     }
 
 

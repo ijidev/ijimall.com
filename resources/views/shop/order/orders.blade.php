@@ -66,11 +66,21 @@
                                 @if ($suborder->status == 'pending')
                                     <div class="badge bg-light">Pending</div>                            
                                 @elseif ($suborder->status == 'processing')
-                                    <div class="badge bg-orange">In transit to fulfillment center</div>
-                                @elseif ($suborder->status == 'completed')
+                                    <div class="badge bg-light">Processing</div>
+                                @elseif ($suborder->status == 'shipped')
+                                    <div class="badge bg-orange">On transit to fulfillment center</div>
+                                @elseif ($suborder->status == 'delivered')
                                     <div class="badge bg-green">Delivered to fulfillment center</div>
-                                @else
+                                @elseif ($suborder->status == 'received')
+                                    <div class="badge bg-green">Received at fulfillment center</div>
+                                @elseif ($suborder->status == 'inspection')
+                                    <div class="badge bg-orange">Under Inspection</div>
+                                @elseif ($suborder->status == 'failed-inspection')
+                                    <div class="badge bg-danger">Failed Inspection</div>
+                                @elseif ($suborder->status == 'declined')
                                     <div class="badge bg-danger">Declined</div>
+                                @else
+                                    <div class="badge bg-success">Completed</div>
                                 @endif
                                 </td>
 

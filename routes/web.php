@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
@@ -180,11 +181,18 @@ Route::resource('vendor', ShopController::class)->middleware(['auth']);
 //Vendor middleware Routes
 Route::middleware(['auth', 'role:vendor'])->group(function () 
 {
-    Route::get('seller/wizard/welcome', [ShopController::class, 'wizard'])->name('wizard.welcome');
-    Route::get('seller/wizard/accountinfo', [ShopController::class, 'accountInfo'])->name('wizard.accountInfo');
-    Route::get('seller/wizard/skip-info', [ShopController::class, 'skipInfo'])->name('wizard.info.skip');
-    Route::get('seller/wizard/payment', [ShopController::class, 'paymentInfo'])->name('wizard.payment');
-    Route::get('seller/wizard/finish', [ShopController::class, 'finish'])->name('wizard.finish');
+    Route::controller(ShopController::class)->group(function () {
+        Route::get('seller/wizard/welcome', 'wizard')->name('wizard.welcome');
+        Route::get('seller/wizard/accountinfo', 'accountInfo')->name('wizard.accountInfo');
+        Route::get('seller/wizard/skip-info', 'skipInfo')->name('wizard.info.skip');
+        Route::get('seller/wizard/payment', 'paymentInfo')->name('wizard.payment');
+        Route::get('seller/wizard/finish', 'finish')->name('wizard.finish');
+
+        Route::get('Dashboard/payment-setup', 'payment')->name('vendor.payment');
+        Route::get('Dashboard/store-setup', 'storeInfo')->name('vendor.store');
+        
+    });
+
     // vendor product related routes
     route::controller(VendorProductController::class)->group(function () {
         Route::get('/Dashboard/product', 'index')->name('vendor.product');
@@ -218,6 +226,16 @@ Route::middleware(['auth', 'role:vendor'])->group(function ()
         Route::get('/Dashboard/withdrawal', 'withdrawal')->name('vendor.withdrawal');
         Route::get('/Dashboard/withdrawal/rerquest', 'reqWithdraw')->name('withdraw.request');
         // Route::post('/orders', 'store');
+    });
+
+    Route::controller(CouponController::class)->group(function () {
+        Route::get('/Dashboard/coupons', 'index')->name('vendor.coupon');
+        Route::get('/Dashboard/coupons/expired', 'expired')->name('vendor.coupon.expired');
+        Route::get('/Dashboard/coupon/edit/{id}', 'edit')->name('vendor.coupon.edit');
+        Route::get('/Dashboard/coupon/store', 'store')->name('vendor.coupon.store');
+        Route::get('/Dashboard/coupon/update/{id}', 'update')->name('vendor.coupon.update');
+        Route::get('/Dashboard/coupon/action', 'action')->name('vendor.coupon.action');
+        Route::get('/Dashboard/coupon/delete/{id}', 'delete')->name('vendor.coupon.delete');
     });
 });
     

@@ -10,6 +10,9 @@
     <title> @yield('title') - Vendor Panel</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('dashboard_asset/assets/css/app.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard_asset/assets/bundles/jqvmap/dist/jqvmap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard_asset/assets/bundles/flag-icon-css/css/flag-icon.min.css') }}">
+  
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('dashboard_asset/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_asset/assets/css/components.css') }}">
@@ -217,17 +220,21 @@
 
             <!-- Main Content -->
             <div class="main-content">
-                @if (session('success'))
-                <div class="alert alert-success z-index-1000 text-center" role="alert">
-                    {{ session('success') }}
-                </div>
-                @elseif (session('error'))
-                <div class="alert alert-danger z-index-1000 text-center" role="alert">
-                    {{ session('error') }}
-                </div>
-                @endif
-
-                @yield('content')
+                <section class="section">
+                    <div class="section-body">
+                        @if (session('success'))
+                        <div class="alert alert-success z-index-1000 text-center" role="alert">
+                            {{ session('success') }}
+                        </div>
+                        @elseif (session('error'))
+                        <div class="alert alert-danger z-index-1000 text-center" role="alert">
+                            {{ session('error') }}
+                        </div>
+                        @endif
+        
+                        @yield('content')
+                    </div>
+                </section>
             </div>
 
             {{-- footer --}}
@@ -244,8 +251,15 @@
     <script src="{{ asset('dashboard_asset/assets/js/app.min.js') }}"></script>
     <!-- JS Libraies -->
     <script src="{{ asset('dashboard_asset/assets/bundles/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/bundles/chartjs/chart.min.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/bundles/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/bundles/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/bundles/jqvmap/dist/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/bundles/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/bundles/jqvmap/dist/maps/jquery.vmap.indonesia.js') }}"></script>
     <!-- Page Specific JS File -->
     <script src="{{ asset('dashboard_asset/assets/js/page/index.js') }}"></script>
+    <script src="{{ asset('dashboard_asset/assets/js/page/widget-chart.js') }}"></script>
     <!-- Template JS File -->
     <script src="{{ asset('dashboard_asset/assets/js/scripts.js') }}"></script>
     <!-- Custom JS File -->
