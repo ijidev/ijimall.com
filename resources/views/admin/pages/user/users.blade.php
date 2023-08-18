@@ -93,7 +93,7 @@
                         </td>
 
                         <td>
-                            <span class="badge bg-orange">{{ $user->wallet->active_bal }}</span>
+                            <span class="badge bg-orange">{{$currency->symbol . number_format($user->wallet->active_bal * $currency->rate , 2) }}</span>
                         </td>
 
                         <td>

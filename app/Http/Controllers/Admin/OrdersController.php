@@ -69,8 +69,9 @@ class OrdersController extends Controller
    }
 
    public function find($orderId){
-      $orders = Order::where('id', $orderId)->get();
-      return view('admin.pages.order.index', compact('orders'));
+      $currency = Auth::user()->currency;
+      $orders = Order::where('id', $orderId)->paginate();
+      return view('admin.pages.order.index', compact('orders','currency'));
    }
 
    public function update(Request $request, $orderId)
@@ -174,6 +175,7 @@ class OrdersController extends Controller
   public function manageSub($id)
   {
       $order = SubOrder::find($id);
-      return view('admin.pages.order.manage-sub', compact('order'));
+      $currency = Auth::user()->currency;
+      return view('admin.pages.order.manage-sub', compact('order','currency'));
   }
 }

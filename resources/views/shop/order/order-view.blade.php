@@ -51,11 +51,11 @@
                                 </td>
 
                                 <td>
-                                    ${{ $item->price }}
+                                    {{ $currency->symbol . number_format($item->price * $currency->rate ,2) }}
                                 </td>
 
                                 <td class="text-center">
-                                    ${{ $total }}
+                                    {{ $currency->symbol . number_format($total * $currency->rate ,2) }}
                                 </td>
                                 
                             </tr>  
@@ -72,7 +72,7 @@
                 <div class="card-text font-bold">
                     <div class="d-flex">
                         <div class="p-2 flex-grow-1">Total</div>
-                        <div class="p-2">${{ $order->grand_total }}</div>
+                        <div class="p-2">{{ $currency->symbol . number_format( $order->grand_total * $currency->rate, 2) }}</div>
                     </div>
                 </div>
             </div>
@@ -212,22 +212,24 @@
                         </div>
                         <div class="d-flex">
                             <div class="p-2 flex-grow-1">Status:</div>
-                            @if ( $order->status == 'completed')
-                                <div class="badge badge-success m-1">Completed</div>
-                            @elseif($order->status == 'processing')
-                                <div class="badge badge-secondry m-1">Processing</div>
-                            @elseif($order->status == 'shipped')
-                                <div class="badge badge-secondry m-1">On Trasit to FC</div>
-                            @elseif($order->status == 'delivered')
-                                <div class="badge badge-success text-white m-1">Delivered at FC</div>
-                            @elseif($order->status == 'recived')
-                                <div class="badge badge-success text-white m-1">Received at FC</div>
-                            @elseif($order->status == 'inspection')
-                                <div class="badge bg-yello text-white m-1">Inspecting order</div>
-                            @elseif($order->status == 'declined')
-                                <div class="badge badge-danger text-white m-1">Declined</div>
+                            @if ($order->status == 'pending')
+                            <div class="badge bg-light">Pending</div>                            
+                            @elseif ($order->status == 'processing')
+                                <div class="badge bg-secondary">Processing</div>
+                            @elseif ($order->status == 'shipped')
+                                <div class="badge bg-orange">On transit to fulfillment center</div>
+                            @elseif ($order->status == 'delivered')
+                                <div class="badge bg-warning">Delivered to fulfillment center</div>
+                            @elseif ($order->status == 'received')
+                                <div class="badge bg-green">Received at fulfillment center</div>
+                            @elseif ($order->status == 'inspection')
+                                <div class="badge bg-orange">Under Inspection</div>
+                            @elseif ($order->status == 'failed-inspection')
+                                <div class="badge bg-danger">Failed Inspection</div>
+                            @elseif ($order->status == 'declined')
+                                <div class="badge bg-danger">Declined</div>
                             @else
-                                <div class="badge bg-light m-1">Pending</div>
+                                <div class="badge bg-success">Completed</div>
                             @endif
                             
                         </div>

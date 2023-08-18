@@ -2,7 +2,7 @@
 @section('content')
     <div class="section-body">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h4>Add New category</h4>
@@ -39,8 +39,7 @@
                 </div>
             </div>
 
-            
-                <div class="col-12 col-md-6 col-lg-8">
+            <div class="col-12 col-md-8">
                 <div class="card">
                     <div class="card-header">
                         <h4>Categories</h4>

@@ -47,7 +47,7 @@
                   User Balance:
                </div>
                <span>
-                  {{ $user->wallet->active_bal }}
+                  {{ $currency->symbol .  number_format($user->wallet->active_bal * $currency->rate, 2) }}
                </span>
             </span>
 
@@ -56,7 +56,7 @@
                   Balance On Hold:
                </div>
                <span class="badge bg-danger text-light">
-                  {{ $user->wallet->hold_bal }}
+                  {{ $currency->symbol .  number_format($user->wallet->hold_bal * $currency->rate, 2) }}
                </span>
             </span>
          </div>
@@ -86,7 +86,7 @@
 
                     <input type="number" name="amount" class="form-control">
                     <div class="input-group-append">
-                      <button class="btn btn-primary" type="submit">fund</button>
+                      <button class="btn btn-light" type="submit">fund</button>
                     </div>
                   </div>
    
@@ -124,6 +124,7 @@
       <div class="card-header">
          User Transaction History
       </div>
+
       <div class="card-body">
          {{-- <h5 class="card-title">Title</h5> --}}
          
@@ -144,7 +145,7 @@
                @foreach ($transactions as $trans)
                   <tr>
                      <td>{{ $trans->trans_ref }}</td>
-                     <td>{{ $trans->amount }}</td>
+                     <td>{{ $currency->symbol .  number_format($trans->amount * $currency->rate, 2) }}</td>
                      <td>{{ $trans->type }}</td>
                      <td>{{ $trans->status }}</td>
                      <td> 

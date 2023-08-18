@@ -9,15 +9,17 @@ use Laratrust\Models\Role;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function users(){
-        $users = User::get();        
+        $users = User::get(); 
+        $currency = Auth::user()->currency;       
         // dd($users);
         $tableName = 'Users';
-        return view('admin.pages.user.users', compact('users','tableName'));
+        return view('admin.pages.user.users', compact('users','tableName','currency'));
     }
     
     
@@ -71,9 +73,10 @@ class UserController extends Controller
     public function manageUser($id)
     {
         $user = User::find($id);
+        $currency = Auth::user()->currency;
         $transactions = $user->trans_log()->orderBy('order_id','desc')->get();
         // dd($user->trans_log);
-        return view('admin.pages.user.manage', compact('user', 'transactions'));
+        return view('admin.pages.user.manage', compact('user', 'transactions','currency'));
     }
 
     public function fundUser(Request $request, $id)
