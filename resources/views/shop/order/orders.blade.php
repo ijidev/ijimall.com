@@ -3,7 +3,7 @@
 <div class="col-12">
     <form action="{{ route('vendor.multi-status') }}">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-light">
                 <h4>All Orders</h4>
                 <div class="card-header-form">
                     <form>
@@ -38,13 +38,64 @@
                         @forelse ($orders as $suborder)
 
                         <tr>
-                            <td class="p-0 text-center">
-                                <div class="custom-checkbox custom-control">
-                                    <input type="checkbox" data-checkboxes="mygroup" name="selected[]" value="{{ $suborder->id }}" class="custom-control-input"
-                                        id="checkbox-{{ $suborder->id }}">
-                                    <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
-                                </div>
-                            </td>
+                            @if ($suborder->status == 'completed')
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="mygrou" disabled name="selected[]" value="{{ 'suborder->id' }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                            @elseif ($suborder->status == 'delivered')
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="" disabled name="selected[]" value="{{ 'suborder->id' }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                            @elseif ($suborder->status == 'declined')
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="" disabled name="selected[]" value="{{ 'suborder->id' }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                            @elseif ($suborder->status == 'inspection')
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="" disabled name="selected[]" value="{{ 'suborder->id' }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                            @elseif ($suborder->status == 'failed-inspection')
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="" disabled name="selected[]" value="{{ 'suborder->id' }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                            @elseif ($suborder->status == 'received')
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="" disabled name="selected[]" value="{{ 'suborder->id' }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                            @else
+                                <td class="p-0 text-center">
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" data-checkboxes="mygroup" name="selected[]" value="{{ $suborder->id }}" class="custom-control-input"
+                                            id="checkbox-{{ $suborder->id }}">
+                                        <label for="checkbox-{{ $suborder->id }}" class="custom-control-label">&nbsp;</label>
+                                    </div>
+                                </td>
+                                    
+                            @endif
 
                             <td>
                                 {{ $suborder->order->order_number }}
@@ -84,7 +135,7 @@
                                 @endif
                                 </td>
 
-                            <td>${{ $suborder->grand_total }}</td>
+                            <td>{{$currency->symbol . number_format($suborder->grand_total * $currency->rate ,2)}}</td>
                             {{-- <td>
                                 @if ($suborder->order->is_paid == '1')
                                     <div class="badge bg-green">Paid</div>
@@ -126,8 +177,9 @@
                                 <div class="form-group">
                                     {{-- <label for="my-select">Text</label> --}}
                                     <select id="my-select" class="form-control" name="status">
-                                        <option value="completed">Mark Completed</option>
                                         <option value="processing">Set to Processing</option>
+                                        <option value="shipped">Mark Shipped Out</option>
+                                        <option value="delivered">Mark Delivered</option>
                                         <option value="declined">Mark Declined</option>
                                     </select>
                                     <button type="submit" class="btn btn link-light">Submit</button>
@@ -140,18 +192,7 @@
                     <div class="text-right">
                         <nav class="d-inline-block">
                             <ul class="pagination mb-0">
-                                <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1 <span
-                                    class="sr-only">(current)</span></a></li>
-                                <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                </li>
+                                {{ $orders->render() }}
                             </ul>
                         </nav>
                     </div> 

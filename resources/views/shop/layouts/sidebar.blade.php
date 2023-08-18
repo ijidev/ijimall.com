@@ -1,13 +1,12 @@
-<div class="main-sidebar sidebar-style-2">
-  <aside id="sidebar-wrapper">
-      <div class="sidebar-brand">
-
+<div class="main-sidebar sidebar-style-1 bg-light">
+  <aside id="sidebar-wrapper ">
         {{-- logo --}}
+        <div class="sidebar-brand">
           <a href="{{ route('vendor.index') }}"> <img alt="image"
                   src="{{ asset('dashboard_asset/assets/img/logo.png/') }}" class="header-logo" />
               <span class="logo-name">My Shop</span>
           </a>
-      </div>
+        </div>
 
       <ul class="sidebar-menu">
           <li class="menu-header">Main</li>
@@ -42,7 +41,7 @@
                       data-feather="user-check"></i><span>My Shop</span></a>
               <ul class="dropdown-menu">
                   <li><a class="nav-link" href="{{ route('vendor.withdrawal') }}">Withdrawal</a></li>
-                  <li><a class="nav-link" href="{{ route('vendor.payment') }}">Payment</a></li>
+                  {{-- <li><a class="nav-link" href="{{ route('vendor.payment') }}">Payment</a></li> --}}
                   <li><a class="nav-link" href="{{ route('vendor.store') }}">Store</a></li>
                   <li><a class="nav-link" href="{{ route('vendor.coupon') }}">Coupon</a></li>
               </ul>

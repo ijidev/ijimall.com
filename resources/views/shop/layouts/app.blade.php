@@ -26,7 +26,7 @@
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
             <div class="navbar-bg"></div>
-            <nav class="navbar navbar-expand-lg main-navbar sticky">
+            <nav class="navbar navbar-expand-lg main-navbar sticky bg-light">
                 <div class="form-inline mr-auto">
                     <ul class="navbar-nav mr-3">
                         <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
@@ -264,6 +264,8 @@
     <script src="{{ asset('dashboard_asset/assets/js/scripts.js') }}"></script>
     <!-- Custom JS File -->
     <script src="{{ asset('dashboard_asset/assets/js/custom.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+
 </body>
 
 

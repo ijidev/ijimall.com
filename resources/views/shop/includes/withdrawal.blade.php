@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <p class="card-text">Wallet Bal <i class="fas fa-wallet fa-7x fa-fw"></i>: {{$currency->symbol . $wallet->active_bal * $currency->rate}}</p>
-                <p class="card-text">Hold Bal: {{$currency->symbol . $wallet->hold_bal * $currency->rate}}</p>
+                <p class="card-text">Hold Bal: {{$currency->symbol . number_format($wallet->hold_bal * $currency->rate,2)}}</p>
             </div>
             <div class="col-sm-6 align-end">
                 <form action="{{ route('withdraw.request') }}">
@@ -47,7 +47,7 @@
                 <tbody>
                     @foreach ($withdraws as $withdraw)
                         <tr>
-                            <td>{{$currency->symbol. $withdraw->amount *$currency->rate}}</td>
+                            <td>{{$currency->symbol. number_format($withdraw->amount * $currency->rate,2)}}</td>
                             <td>{{ $withdraw->status }}</td>
                             <td>{{ $withdraw->updated_at }}</td>
                         </tr>

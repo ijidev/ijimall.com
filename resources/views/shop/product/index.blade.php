@@ -45,36 +45,29 @@
         </div>
 
         <div class="card">
-            <div class="card-body col-md-12">
+            <div class="card-header bg-light">
                 <h5 class="card-title">My Products</h5>
+            </div>
+            <div class="card-body  mt-0 table-responsive">
                 <table class="table font-bold">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                <div class="custom-checkbox custom-checkbox-table custom-control">
-                                    <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad"
-                                        class="custom-control-input" id="checkbox-all">
-                                    <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
-                                </div>
-                            </th>
-                            <th> </th>
-                            <th> </th>
-                            <th>Price</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                            {{-- <th>Price Total</th> --}}
-                        </tr>
-                    </thead>
-                    
-                    
-                    <tbody>
-                        @foreach ($products as $product)
-                        {{-- {{ dd($item) }} --}}
-                        {{-- @php
-                            $total = $item->price * $item->pivot->quantity 
-                        @endphp --}}
-
+                    <tr class="bg-light pt-0">
+                        <th class="text-center">
+                            <div class="custom-checkbox custom-checkbox-table custom-control">
+                                <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad"
+                                    class="custom-control-input" id="checkbox-all">
+                                <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                            </div>
+                        </th>
+                        <th> </th>
+                        <th> </th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        {{-- <th>Price Total</th> --}}
+                    </tr>
+                        
+                    @foreach ($products as $product) 
                         <tr>
 
                             <td class="p-0 text-center">
@@ -83,8 +76,8 @@
                                         id="checkbox-{{ $product->id }}" name="selected[]">
                                     <label for="checkbox-{{ $product->id }}" class="custom-control-label">&nbsp;</label>
                                 </div>
-    
-    
+
+
                                 </div>
                             </td>
 
@@ -129,15 +122,12 @@
                                 </div>
                             </td>
                             
-                        </tr> 
-                         
+                        </tr>   
                     @endforeach
-                        
-                    </tbody>
                 </table>
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer bg-light">
                 <div class="row d-flex">
                 {{-- footer left elenemt --}}
                     <div class="flex-grow-1">
@@ -160,20 +150,7 @@
                     {{-- footer right elenemt --}}
                     <div class="text-right">
                         <nav class="d-inline-block">
-                            <ul class="pagination mb-0">
-                                <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1 <span
-                                    class="sr-only">(current)</span></a></li>
-                                <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                </li>
-                            </ul>
+                            {{ $products->render() }}
                         </nav>
                     </div> 
                 </div>

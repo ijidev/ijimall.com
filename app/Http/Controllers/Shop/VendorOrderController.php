@@ -11,15 +11,27 @@ class VendorOrderController extends Controller
 {
     public function index()
     {
-        $orders = SubOrder::where('vendor_id', Auth::user()->id)->orderBy('id','desc')->get();
+        $currency = Auth::user()->currency;
+        $orders = SubOrder::where('vendor_id', Auth::user()->id)->orderBy('id','desc')->paginate(20);
         // dd($orders);
-        return view('shop.order.orders', compact('orders'));
+        return view('shop.order.orders', compact('orders','currency'));
+    }
+
+    public function uncomplete()
+    {
+        $currency = Auth::user()->currency;
+        $orders = SubOrder::where('vendor_id', Auth::user()->id)->where('status','!=', 'completed')
+                            ->orderBy('id','desc')
+                            ->paginate(20);
+        // dd($orders);
+        return view('shop.order.orders', compact('orders','currency'));
     }
 
     public function details(SubOrder $suborder, $orderId)
     {
+        $currency = Auth::user()->currency;
         $order = $suborder->find($orderId);
-        return view('shop.order.order-view', compact('order'));
+        return view('shop.order.order-view', compact('order','currency'));
     }
 
     public function update(Request $request, $orderId)
@@ -31,9 +43,9 @@ class VendorOrderController extends Controller
         $order->status = $request->status ;
         $order->update();
 
-    //   $subcount = $sub->count(); #get count of total suborders
-      
-    //   dd($parent);
+        //   $subcount = $sub->count(); #get count of total suborders
+        
+        //   dd($parent);
       return back();
     }
 

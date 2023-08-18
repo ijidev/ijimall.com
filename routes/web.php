@@ -188,7 +188,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function ()
         Route::get('seller/wizard/payment', 'paymentInfo')->name('wizard.payment');
         Route::get('seller/wizard/finish', 'finish')->name('wizard.finish');
 
-        Route::get('Dashboard/payment-setup', 'payment')->name('vendor.payment');
+        // Route::get('Dashboard/payment-setup', 'paymentInfo')->name('vendor.payment');
         Route::get('Dashboard/store-setup', 'storeInfo')->name('vendor.store');
         
     });
@@ -217,6 +217,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function ()
 
     Route::controller(VendorOrderController::class)->group(function () {
         Route::get('Dashboard/orders/', 'index')->name('vendor.orders');
+        Route::get('Dashboard/orders/pending', 'uncomplete')->name('vendor.order.uncomplete');
         Route::get('Dashboard/view-order/{orderId}', 'details')->name('vendor.order.view');
         Route::get('Dashboard/update-order/{orderId}', 'update')->name('vendor.order.update');
         Route::get('Dashboard/vendor/update-status', 'multiupdate')->name('vendor.multi-status');

@@ -17,7 +17,7 @@ class VendorProductController extends Controller
         $user = Auth::user();
         $vendorId = $user->shop->id;
         $product = Product::where('vendor_id', $vendorId);
-        $products = $product->where('status', 'published')->get();
+        $products = $product->where('status', 'published')->paginate('20');
         // $products = DB::select('select * from products where vendor_id ='. $vendorId);
         // dd($products);
         // $products = Product::find($productV);
@@ -64,7 +64,7 @@ class VendorProductController extends Controller
         $user = Auth::user();
         $vendorId = $user->shop->id;
         $vendorProduct = Product::where('vendor_id', $vendorId);
-        $products = $vendorProduct->where('status', '!=' ,'trash',)->get();
+        $products = $vendorProduct->where('status', '!=' ,'trash',)->paginate(20);
         return view('shop.product.index', compact('products'));
         // dd($products);
     }
@@ -74,7 +74,7 @@ class VendorProductController extends Controller
         $user = Auth::user();
         $vendorId = $user->shop->id;
         $vendorProduct = Product::where('vendor_id', $vendorId);
-        $products = $vendorProduct->where('status', 'pending',)->get();
+        $products = $vendorProduct->where('status', 'pending',)->paginate(20);
         return view('shop.product.index', compact('products'));
         // dd($products);
     }
@@ -84,7 +84,7 @@ class VendorProductController extends Controller
         $user = Auth::user();
         $vendorId = $user->shop->id;
         $vendorProduct = Product::where('vendor_id', $vendorId);
-        $products = $vendorProduct->where('status', 'draft',)->get();
+        $products = $vendorProduct->where('status', 'draft',)->paginate(20);
         return view('shop.product.index', compact('products'));
         // dd($products);
     }
@@ -94,7 +94,7 @@ class VendorProductController extends Controller
         $user = Auth::user();
         $vendorId = $user->shop->id;
         $vendorProduct = Product::where('vendor_id', $vendorId);
-        $products = $vendorProduct->where('status', 'trash',)->get();
+        $products = $vendorProduct->where('status', 'trash',)->paginate(20);
         return view('shop.product.trash' , compact('products'));
         // dd($products);
     }

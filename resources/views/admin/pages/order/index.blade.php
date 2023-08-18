@@ -79,7 +79,7 @@
                                 @endif
                             </td>
 
-                            <td>{{$currency->symbol. $order->grand_total * $currency->rate}}</td>
+                            <td>{{$currency->symbol. number_format($order->grand_total * $currency->rate ,2)}}</td>
                             <td>
                                 @if ($order->is_paid == '1')
                                     <div class="badge bg-green">Paid</div>

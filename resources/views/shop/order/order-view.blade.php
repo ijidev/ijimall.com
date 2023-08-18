@@ -51,11 +51,11 @@
                                 </td>
 
                                 <td>
-                                    ${{ $item->price }}
+                                    {{ $currency->symbol . number_format($item->price * $currency->rate ,2) }}
                                 </td>
 
                                 <td class="text-center">
-                                    ${{ $total }}
+                                    {{ $currency->symbol . number_format($total * $currency->rate ,2) }}
                                 </td>
                                 
                             </tr>  
@@ -72,7 +72,7 @@
                 <div class="card-text font-bold">
                     <div class="d-flex">
                         <div class="p-2 flex-grow-1">Total</div>
-                        <div class="p-2">${{ $order->grand_total }}</div>
+                        <div class="p-2">{{ $currency->symbol . number_format( $order->grand_total * $currency->rate, 2) }}</div>
                     </div>
                 </div>
             </div>

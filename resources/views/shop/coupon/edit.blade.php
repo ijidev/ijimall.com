@@ -20,22 +20,23 @@ Edit Coupon
                     <div class="form-group">
                       <label for="">Value</label>
                       <input type="number" class="form-control" name="value" value="{{ $coupon->value }}" id="" aria-describedby="helpId" placeholder="">
-                      <small id="helpId" class="form-text text-muted">Percentage value / Amount in ({{ $currency->symbol }})</small>
+                      <small id="helpId" class="form-text text-muted">Percentage value / Amount in ({{ $currency->name }})</small>
                     </div>
                 </div>
-        
+                
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="my-select">Type</label>
                         <select id="my-select" class="form-control" name="type">
                             @if ($coupon->discountType == 'percent')
-                                <option selected value="percent">Percentage</option>
-                                <option value="flat">Fiat</option>
+                            <option selected value="percent">Percentage</option>
+                            <option value="flat">Fiat</option>
                             @else
-                                <option value="percent">Percentage</option>
-                                <option selected value="fixed">Fiat</option>
+                            <option value="percent">Percentage</option>
+                            <option selected value="fixed">Fiat</option>
                             @endif
                         </select>
+                        <small id="helpId" class="form-text text-muted">Coupon Type</small>
                     </div>
                 </div>
             </div>
