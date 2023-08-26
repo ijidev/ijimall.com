@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Currency;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
@@ -11,9 +13,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $product = Product::find($id);
+        // dd($id);
+        $currencies = Currency::all();
+        if (Auth::guest()) {
+            $currency = Currency::where('rate', 1)->get()[0];
+        }else{
+            $currency = Auth::user()->currency;
+        }
+        return view('frontend.singleproduct', compact('product','currency'));
     }
 
     /**

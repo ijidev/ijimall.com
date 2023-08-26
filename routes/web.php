@@ -8,6 +8,8 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\ProductController as FrontProduct;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
@@ -16,7 +18,6 @@ use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\Shop\SellerController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\VendorController;
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Shop\VendorOrderController;
 use App\Http\Controllers\Shop\VendorProductController;
@@ -55,6 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('order', OrderController::class);
 });
 
+Route::controller(FrontProduct::class)->group(function () {
+    Route::get('/product/{id}', 'index')->name('product.single');
+});
 
 //admin middleware routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
