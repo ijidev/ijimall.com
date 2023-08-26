@@ -119,9 +119,12 @@
                         <div class="product-details-footer">
                             <div class="product-cat">
                                 <span>Category:</span>
-                                <a href="#">Women</a>,
-                                <a href="#">Dresses</a>,
-                                <a href="#">Yellow</a>
+                                @forelse ($product->category as $cat)
+                                    <a href="#">{{ $cat->name }}</a>,   
+                                @empty
+                                    
+                                @endforelse
+                                
                             </div><!-- End .product-cat -->
 
                             <div class="social-icons social-icons-sm">
