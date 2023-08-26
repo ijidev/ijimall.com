@@ -1,12 +1,13 @@
 <?php
-    $base = \App\Models\Currency::where('rate',1)->get()[0];
+    $base = \App\Models\Currency::where('rate', 1)->get()[0];
     $currencies = \App\Models\Currency::all();
-    $cart = \App\Models\Cart::where('user_id',Auth::user()->id)->get();
     if (Auth::guest()) {
         $currency = $base;
     } else {
+        $cart = \App\Models\Cart::where('user_id',Auth::user()->id)->get();
         $currency = Auth::user()->currency;
     }
+    // dd($currency);
     // $currency = \App\Models\Currency::where('user_id',Auth::user()->id);
 ?>
 
@@ -29,11 +30,11 @@
                                     @guest
                                         {{ $currency->name }}   
                                     @else
-                                        <a href="#">{{ Auth::user()->currency->name }}</a>    
+                                        <a href="#">{{ $currency->name }}</a>    
                                         <div class="header-menu">
                                             <ul>
-                                                @foreach ($currencies as $currency)
-                                                    <li><a class="dropdown-item" href="{{ route('user.currency',$currency->name) }}">{{ $currency->name }}</a></li>
+                                                @foreach ($currencies as $curency)
+                                                    <li><a class="dropdown-item" href="{{ route('user.currency',$curency->name) }}">{{ $currency->name }}</a></li>
                                                 @endforeach
                                             </ul>
                                         </div><!-- End .header-menu -->
@@ -131,15 +132,15 @@
                     @auth
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-cart-products">
-                                @foreach ($cart as $item)       
+                                @forelse ($cart as $item)       
                                     <div class="product">
                                         <div class="product-cart-details">
                                             <h4 class="product-title">
                                                 <a href="{{ route('product.single', $item->product->id) }}">{{ $item->product->name }}</a>
                                             </h4>
-                                            @php
+                                            {{-- @php
                                                 $currency = Auth::user()->currency
-                                            @endphp
+                                            @endphp --}}
                                             <span class="cart-product-info">
                                                 <span class="cart-product-qty">{{ $item->quantity }}</span>
                                                 x {{$currency->symbol. number_format($item->product->price * $currency->rate ,2) }}
@@ -153,13 +154,14 @@
                                         </figure>
                                         <a href="{{ route('cart.delete', $item->id) }}" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
                                     </div><!-- End .product -->
-                                @endforeach
+                                @empty
+                                @endforelse
                             </div><!-- End .cart-product -->
 
                             <div class="dropdown-cart-total">
                                 <span>Total</span>
 
-                                <span class="cart-total-price">{{ $currency->symbol . number_format($item->sum('amount') * $currency->rate, 2) }}</span>
+                                <span class="cart-total-price">{{ $currency->symbol . number_format($cart->sum('amount') * $currency->rate, 2) }}</span>
                             </div><!-- End .dropdown-cart-total -->
 
                             <div class="dropdown-cart-action">

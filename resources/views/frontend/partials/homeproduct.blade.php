@@ -66,7 +66,10 @@
                             <div class="product-body pb-1">
                                 
                                 <div class="product-cat">
-                                    <a href="#">{{ $product->category[0]->name }}</a>
+                                    @forelse ($product->category as $cat)
+                                        <a href="#">{{ $cat->name }}</a>
+                                    @empty
+                                    @endforelse
                                 </div><!-- End .product-cat -->
                                 
                                 <h3 class="product-title">
