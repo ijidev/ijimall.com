@@ -21,7 +21,7 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id', 'subcategory_id')->withpivot('name', 'image');
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id', );
     }
 
     public function subcat()
